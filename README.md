@@ -13,6 +13,8 @@ Real time messaging web app built using Node and Next.js.
 Create `frontend/.env.local` with the following environment variables:
 
 ```
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
 GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
 GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
 DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
