@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  db:
+    container_name: "msngr-db"
+    image: mongo:6-jammy
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./docker/mongodb:/data/db
