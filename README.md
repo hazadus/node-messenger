@@ -7,6 +7,7 @@ Real time messaging web app built using Node and Next.js.
 - Frontend
   - [Next.js](https://nextjs.org)
   - [NextAuth.js](https://next-auth.js.org): Authentication for Next.js
+  - [Chakra UI](https://chakra-ui.com/): Chakra UI is a simple, modular and accessible component library that gives you the building blocks you need to build your React applications.
 
 ## App Setup in Dev Environment
 
