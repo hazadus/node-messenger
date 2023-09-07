@@ -15,6 +15,7 @@ Real time messaging web app built using Node, Apollo and Next.js.
   - [nodemon](https://www.npmjs.com/package/nodemon)
   - [Apollo Server v3](https://www.apollographql.com/docs/apollo-server/v3)
   - [@graphql-tools/schema](https://www.npmjs.com/package/@graphql-tools/schema)
+  - [NextAuth.js](https://next-auth.js.org): Authentication for Next.js
   - [lodash.merge](https://www.npmjs.com/package/lodash.merge)
   - [dotenv](https://www.npmjs.com/package/dotenv): Dotenv is a zero-dependency module that loads environment variables from a `.env` file into `process.env`.
 - Tools
@@ -66,3 +67,5 @@ In this section all the references used while building this application are list
 - MongoDB:
   - [Docker Compose to create replication in MongoDB](https://stackoverflow.com/a/57293443/20197519)
   - [Error: MongoDB error Server selection timeout: No available servers](https://github.com/prisma/prisma/discussions/11929)
+- Apollo v3:
+  - [Resolvers](https://www.apollographql.com/docs/apollo-server/v3/data/resolvers)

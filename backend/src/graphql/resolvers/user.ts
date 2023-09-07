@@ -3,8 +3,10 @@ const userResolvers = {
     searchUsers: () => {},
   },
   Mutation: {
-    createUsername: () => {
-      console.log("💡 createUsername resolver called");
+    createUsername: (_: any, args: { username: string }, context: any) => {
+      const { username } = args;
+      console.log("💡 createUsername resolver | username =", username);
+      console.log("   createUsername resolver | context  =", context);
     },
   },
 };
