@@ -1,3 +1,6 @@
+import UserOperations from "@/graphql/operations/user";
+import type { CreateUsernameData, CreateUsernameVariables } from "@/types";
+import { useMutation } from "@apollo/client";
 import { Button, Center, Image, Input, Stack, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { signIn } from "next-auth/react";
@@ -10,9 +13,13 @@ type AuthProps = {
 
 const Auth: React.FC<AuthProps> = ({ session, reloadSession }) => {
   const [username, setUsername] = useState("");
+  const [createUsername, { data, loading, error }] = useMutation<CreateUsernameData, CreateUsernameVariables>(
+    UserOperations.Mutations.createUsername,
+  );
 
   const onSubmitUsername = async () => {
     try {
+      await createUsername({ variables: { username } });
     } catch (error: any) {
       console.log("onSubmitUsername error:", error);
     }

@@ -16,6 +16,10 @@ Real time messaging web app built using Node and Next.js.
   - [Apollo Server v3](https://www.apollographql.com/docs/apollo-server/v3)
   - [@graphql-tools/schema](https://www.npmjs.com/package/@graphql-tools/schema)
   - [lodash.merge](https://www.npmjs.com/package/lodash.merge)
+- Tools
+  - VSCode Extensions
+    - GraphQL: Syntax Highlighting (by GraphQL Foundation)
+    - GraphQL: Language Feature Support (by GraphQL Foundation)
 
 ## App Setup in Dev Environment
 
