@@ -3,7 +3,9 @@ const userResolvers = {
     searchUsers: () => {},
   },
   Mutation: {
-    createUsername: () => {},
+    createUsername: () => {
+      console.log("💡 createUsername resolver called");
+    },
   },
 };
 
