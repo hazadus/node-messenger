@@ -13,4 +13,12 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
+  callbacks: {
+    async session({ session, token, user }) {
+      // Blend user from the session and user from the database
+      // to add `id` field
+      return { ...session, user: { ...session.user, ...user } };
+    },
+  },
 });

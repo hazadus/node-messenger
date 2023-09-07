@@ -1,4 +1,5 @@
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import { PrismaClient } from "@prisma/client";
 import {
   ApolloServerPluginDrainHttpServer,
   ApolloServerPluginLandingPageLocalDefault,
@@ -24,13 +25,15 @@ async function main() {
     credentials: true, // alows server to accept auth headers
   };
 
+  const prisma = new PrismaClient();
+
   const server = new ApolloServer({
     schema,
     csrfPrevention: true,
     cache: "bounded",
     context: async ({ req, res }): Promise<GraphQLContext> => {
       const session = await getSession({ req });
-      return { session };
+      return { session, prisma };
     },
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),

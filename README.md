@@ -7,6 +7,7 @@ Real time messaging web app built using Node, Apollo and Next.js.
 - Frontend
   - [Next.js](https://nextjs.org)
   - [NextAuth.js](https://next-auth.js.org): Authentication for Next.js
+  - [Prisma](https://www.prisma.io/docs/getting-started/quickstart): Needed on the frontend by NextAuth.js.
   - [Chakra UI](https://chakra-ui.com/): Chakra UI is a simple, modular and accessible component library that gives you the building blocks you need to build your React applications.
   - [Apollo Client](https://www.apollographql.com/docs/react/get-started): Apollo Client is a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL. Use it to fetch, cache, and modify application data, all while automatically updating your UI.
 - Backend
@@ -16,6 +17,7 @@ Real time messaging web app built using Node, Apollo and Next.js.
   - [Apollo Server v3](https://www.apollographql.com/docs/apollo-server/v3)
   - [@graphql-tools/schema](https://www.npmjs.com/package/@graphql-tools/schema)
   - [NextAuth.js](https://next-auth.js.org): Authentication for Next.js
+  - [Prisma](https://www.prisma.io/docs/getting-started/quickstart)
   - [lodash.merge](https://www.npmjs.com/package/lodash.merge)
   - [dotenv](https://www.npmjs.com/package/dotenv): Dotenv is a zero-dependency module that loads environment variables from a `.env` file into `process.env`.
 - Tools
@@ -33,7 +35,10 @@ Create `backend/.env` with the following environment variables:
 
 ```
 CLIENT_ORIGIN=http://localhost:3000
+DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
 ```
+
+Generate Prisma client: `npx prisma generate --schema=src/prisma/schema.prisma`.
 
 Then `npm run dev` to run the app using `nodemon`.
 

@@ -21,6 +21,7 @@ const Auth: React.FC<AuthProps> = ({ session, reloadSession }) => {
     if (!username) return;
 
     try {
+      console.log("onSubmitUsername session data =", session);
       await createUsername({ variables: { username } });
     } catch (error: any) {
       console.log("onSubmitUsername error:", error);
