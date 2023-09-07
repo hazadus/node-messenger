@@ -7,7 +7,15 @@ import { getSession, useSession } from "next-auth/react";
 const Home: NextPage = () => {
   const { data: session } = useSession();
 
-  const reloadSession = () => {};
+  /**
+   * This will cause NextAuth to reload session and trigger `session()` callback
+   * in `[...nextauth].ts`. It is needed to reload user data from the database.
+   * `useSession()` will refresh `session`, and then user will see the Chat component.
+   */
+  const reloadSession = () => {
+    const event = new Event("visibilitychange");
+    document.dispatchEvent(event);
+  };
 
   return (
     <Box>

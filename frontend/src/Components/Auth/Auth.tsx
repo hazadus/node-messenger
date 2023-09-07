@@ -13,7 +13,7 @@ type AuthProps = {
 
 const Auth: React.FC<AuthProps> = ({ session, reloadSession }) => {
   const [username, setUsername] = useState("");
-  const [createUsername, { data, loading, error }] = useMutation<CreateUsernameData, CreateUsernameVariables>(
+  const [createUsername, { loading, error }] = useMutation<CreateUsernameData, CreateUsernameVariables>(
     UserOperations.Mutations.createUsername,
   );
 
@@ -22,7 +22,22 @@ const Auth: React.FC<AuthProps> = ({ session, reloadSession }) => {
 
     try {
       console.log("onSubmitUsername session data =", session);
-      await createUsername({ variables: { username } });
+      const { data } = await createUsername({ variables: { username } });
+
+      if (!data?.createUsername) {
+        throw new Error();
+      }
+
+      if (data.createUsername.error) {
+        const {
+          createUsername: { error },
+        } = data;
+
+        throw new Error(error);
+      }
+
+      // Reload user from database to retrieve newly set `username`
+      reloadSession();
     } catch (error: any) {
       console.log("onSubmitUsername error:", error);
     }
