@@ -10,6 +10,7 @@ Real time messaging web app built using Node, Apollo and Next.js.
   - [Prisma](https://www.prisma.io/docs/getting-started/quickstart): Needed on the frontend by NextAuth.js.
   - [Chakra UI](https://chakra-ui.com/): Chakra UI is a simple, modular and accessible component library that gives you the building blocks you need to build your React applications.
   - [Apollo Client](https://www.apollographql.com/docs/react/get-started): Apollo Client is a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL. Use it to fetch, cache, and modify application data, all while automatically updating your UI.
+  - [react-hot-toast](https://www.npmjs.com/package/react-hot-toast): Smoking hot Notifications for React.
 - Backend
   - [typescript](https://www.npmjs.com/package/typescript): TypeScript is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS.
   - [ts-node](https://www.npmjs.com/package/ts-node): TypeScript execution and REPL for node.js, with source map and native ESM support.
