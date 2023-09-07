@@ -9,6 +9,13 @@ Real time messaging web app built using Node and Next.js.
   - [NextAuth.js](https://next-auth.js.org): Authentication for Next.js
   - [Chakra UI](https://chakra-ui.com/): Chakra UI is a simple, modular and accessible component library that gives you the building blocks you need to build your React applications.
   - [Apollo Client](https://www.apollographql.com/docs/react/get-started): Apollo Client is a comprehensive state management library for JavaScript that enables you to manage both local and remote data with GraphQL. Use it to fetch, cache, and modify application data, all while automatically updating your UI.
+- Backend
+  - [typescript](https://www.npmjs.com/package/typescript): TypeScript is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS.
+  - [ts-node](https://www.npmjs.com/package/ts-node): TypeScript execution and REPL for node.js, with source map and native ESM support.
+  - [nodemon](https://www.npmjs.com/package/nodemon)
+  - [Apollo Server v3](https://www.apollographql.com/docs/apollo-server/v3)
+  - [@graphql-tools/schema](https://www.npmjs.com/package/@graphql-tools/schema)
+  - [lodash.merge](https://www.npmjs.com/package/lodash.merge)
 
 ## App Setup in Dev Environment
 
