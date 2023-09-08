@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { ISODateString } from "next-auth";
 
 export type GraphQLContext = {
-  session: MySession | null;
+  session: CustomSession | null;
   prisma: PrismaClient;
   // pubsub
 };
@@ -12,12 +12,12 @@ export type CreateUsernameResponse = {
   error: string;
 };
 
-interface MySession {
-  user?: User;
+interface CustomSession {
+  user?: CustomUser;
   expires: ISODateString;
 }
 
-interface User {
+interface CustomUser {
   id?: string;
   username?: string;
   name?: string | null;

@@ -5,6 +5,13 @@ const userResolvers = {
     searchUsers: () => {},
   },
   Mutation: {
+    /**
+     * Set `username` field for currently authenticated user - create new or update existing.
+     * Do not allow to use usernames that already taken.
+     * @param args
+     * @param context
+     * @returns operation result: { success: boolean, error: string }
+     */
     createUsername: async (
       _: any,
       args: { username: string },
@@ -17,6 +24,7 @@ const userResolvers = {
       console.log("   createUsername resolver | session  =", session);
 
       if (!session?.user) {
+        console.log("❌ createUsername: User is not authenticated.");
         return {
           success: false,
           error: "Not authenticated.",
@@ -32,14 +40,15 @@ const userResolvers = {
         const existingUser = await prisma.user.findUnique({ where: { username: username } });
 
         if (existingUser) {
+          console.log("❌ createUsername: Username is already taken.");
           return {
             success: false,
-            error: "Username already taken.",
+            error: "Username is already taken. Try another!",
           };
         }
 
         /**
-         * Update user.
+         * Update user document in the database.
          */
         await prisma.user.update({
           where: {
@@ -50,6 +59,7 @@ const userResolvers = {
           },
         });
 
+        console.log(`✅ createUsername: Username "${username}" successfully set for user ${userId}.`);
         return {
           success: true,
           error: "",
@@ -61,11 +71,6 @@ const userResolvers = {
           error: error.message,
         };
       }
-
-      return {
-        success: true,
-        error: "",
-      };
     },
   },
 };
