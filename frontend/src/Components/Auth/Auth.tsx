@@ -58,6 +58,7 @@ const Auth: React.FC<AuthProps> = ({ session, reloadSession }) => {
             <Image
               src="images/appLogo.png"
               boxSize="300px"
+              alt="Node Messenger Logo"
             />
             <Text fontSize="3xl">Create a Username</Text>
             <Input
@@ -78,6 +79,7 @@ const Auth: React.FC<AuthProps> = ({ session, reloadSession }) => {
             <Image
               src="images/appLogo.png"
               boxSize="300px"
+              alt="Node Messenger Logo"
             />
             <Text fontSize="3xl">Node Messenger</Text>
             <Button

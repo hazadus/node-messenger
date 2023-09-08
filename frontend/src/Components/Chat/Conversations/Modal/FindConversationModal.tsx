@@ -1,4 +1,4 @@
-import { SearchUsersData, SearchUsersVariables } from "@/types";
+import { SearchUsersData, SearchUsersVariables, SearchedUser } from "@/types";
 import { useLazyQuery } from "@apollo/client";
 import {
   Button,
@@ -14,6 +14,7 @@ import {
 import React, { useState } from "react";
 import userOperations from "../../../../graphql/operations/user";
 import SearchResultsList from "./SearchResultsList";
+import Participants from "./Participants";
 
 type FindConversationModalProps = {
   isOpen: boolean;
@@ -22,6 +23,7 @@ type FindConversationModalProps = {
 
 const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, onClose }) => {
   const [username, setUsername] = useState("");
+  const [participants, setParticipants] = useState<Array<SearchedUser>>([]);
   const [searchUsers, { data, loading, error }] = useLazyQuery<SearchUsersData, SearchUsersVariables>(
     userOperations.Queries.searchUsers,
   );
@@ -29,6 +31,15 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     searchUsers({ variables: { username: username } });
+  };
+
+  const addParticipant = (user: SearchedUser) => {
+    if (!participants.find((item) => item.id === user.id)) setParticipants((prev) => [...prev, user]);
+    setUsername("");
+  };
+
+  const removeParticipant = (user: SearchedUser) => {
+    setParticipants((prev) => prev.filter((item) => item.id !== user.id));
   };
 
   return (
@@ -42,7 +53,7 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
           bg="#2D2D2D"
           pb={4}
         >
-          <ModalHeader>Find Chat</ModalHeader>
+          <ModalHeader>Create new Chat</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={onSubmit}>
@@ -62,7 +73,15 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
                 </Button>
               </Stack>
             </form>
-            <SearchResultsList users={data?.searchUsers} />
+            <SearchResultsList
+              users={data?.searchUsers}
+              addParticipant={addParticipant}
+              removeParticipant={removeParticipant}
+            />
+            <Participants
+              participants={participants}
+              removeParticipant={removeParticipant}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>

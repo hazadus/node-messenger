@@ -29,6 +29,7 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
             src={session.user.image}
             boxSize="40px"
             borderRadius="full"
+            alt="User Profile Image"
           />
         </Tooltip>
       )}

@@ -4,9 +4,15 @@ import { Flex, Stack, Text, Image, Button } from "@chakra-ui/react";
 
 type SearchResultsListProps = {
   users?: Array<SearchedUser>;
+  addParticipant: (user: SearchedUser) => void;
+  removeParticipant: (user: SearchedUser) => void;
 };
 
-const SearchResultsList: React.FC<SearchResultsListProps> = ({ users }) => {
+const SearchResultsList: React.FC<SearchResultsListProps> = ({
+  users,
+  addParticipant,
+  removeParticipant,
+}) => {
   return (
     <>
       {users && (
@@ -28,12 +34,14 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({ users }) => {
                   borderRadius="4px"
                   cursor="pointer"
                   _hover={{ bg: "whiteAlpha.200" }}
+                  onClick={() => addParticipant(user)}
                 >
                   <Image
                     src={user.image}
                     boxSize="40px"
                     borderRadius="full"
                     mr={4}
+                    alt="User Profile Image"
                   />
                   <Flex
                     align="center"
