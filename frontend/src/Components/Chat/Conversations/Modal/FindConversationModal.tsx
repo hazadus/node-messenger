@@ -1,12 +1,15 @@
 import {
+  Button,
+  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Stack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 
 type FindConversationModalProps = {
   isOpen: boolean;
@@ -14,6 +17,12 @@ type FindConversationModalProps = {
 };
 
 const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, onClose }) => {
+  const [username, setUsername] = useState("");
+
+  const onSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <Modal
@@ -21,10 +30,24 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
         onClose={onClose}
       >
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+        <ModalContent
+          bg="#2D2D2D"
+          pb={4}
+        >
+          <ModalHeader>Find Chat</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Modal Body</ModalBody>
+          <ModalBody>
+            <form onSubmit={onSubmit}>
+              <Stack spacing={4}>
+                <Input
+                  placeholder="Enter a username to find"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                />
+                <Button isDisabled={!username}>Search</Button>
+              </Stack>
+            </form>
+          </ModalBody>
         </ModalContent>
       </Modal>
     </>
