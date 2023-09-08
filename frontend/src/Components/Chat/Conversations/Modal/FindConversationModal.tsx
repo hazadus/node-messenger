@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import userOperations from "../../../../graphql/operations/user";
 import SearchResultsList from "./SearchResultsList";
 import Participants from "./Participants";
+import toast from "react-hot-toast";
 
 type FindConversationModalProps = {
   isOpen: boolean;
@@ -31,6 +32,15 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
   const onSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     searchUsers({ variables: { username: username } });
+  };
+
+  const onCreateConversation = async () => {
+    try {
+      // createConversation mutation
+    } catch (error: any) {
+      console.log("onCreateConversation error:", error);
+      toast.error(error?.message);
+    }
   };
 
   const addParticipant = (user: SearchedUser) => {
@@ -82,6 +92,16 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
               participants={participants}
               removeParticipant={removeParticipant}
             />
+            <Button
+              bg="brand.100"
+              width="100%"
+              mt={4}
+              isDisabled={!participants.length}
+              _hover={{ bg: "brand.100" }}
+              onClick={() => {}}
+            >
+              Create Chat
+            </Button>
           </ModalBody>
         </ModalContent>
       </Modal>
