@@ -17,7 +17,7 @@ interface CustomSession {
   expires: ISODateString;
 }
 
-interface CustomUser {
+export interface CustomUser {
   id?: string;
   username?: string;
   name?: string | null;

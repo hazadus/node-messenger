@@ -1,15 +1,53 @@
-import { CreateUsernameResponse, GraphQLContext } from "../../types";
+import { ApolloError } from "apollo-server-core";
+import { CreateUsernameResponse, GraphQLContext, CustomUser } from "../../types";
+import { User } from "@prisma/client";
 
 const userResolvers = {
   Query: {
-    searchUsers: () => {},
+    /**
+     * Find a user in the database by username.
+     */
+    searchUsers: async (
+      _: any,
+      args: { username: string },
+      context: GraphQLContext,
+    ): Promise<Array<User>> => {
+      const { username: usernameToFind } = args;
+      const { session, prisma } = context;
+
+      console.log("💡 searchUsers resolver | usernameToFind =", usernameToFind);
+
+      if (!session?.user) {
+        throw new ApolloError("User no authorized.");
+      }
+
+      const {
+        user: { username: signedInUsername },
+      } = session;
+
+      try {
+        const users = await prisma.user.findMany({
+          where: {
+            username: {
+              contains: usernameToFind,
+              not: signedInUsername,
+              mode: "insensitive",
+            },
+          },
+        });
+
+        return users;
+      } catch (error: any) {
+        console.log("❌ searchUsers error:", error);
+        throw new ApolloError(error?.message);
+      }
+    },
   },
   Mutation: {
     /**
      * Set `username` field for currently authenticated user - create new or update existing.
      * Do not allow to use usernames that already taken.
-     * @param args
-     * @param context
+     *
      * @returns operation result: { success: boolean, error: string }
      */
     createUsername: async (
