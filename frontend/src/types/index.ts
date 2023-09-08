@@ -24,8 +24,12 @@ export type SearchUsersData = {
   searchUsers: Array<SearchedUser>;
 };
 
-type SearchedUser = {
-  // Files selected to get from backend are at `operations/users.ts`, `Queries.searchUsers()`:
+/**
+ * This type represents data returned by `searchUsers` resolver on the backend.
+ */
+export type SearchedUser = {
+  // Fields selected to get from backend are at `operations/users.ts`, `Queries.searchUsers()`:
   id: string;
   username: string;
+  image: string;
 };
