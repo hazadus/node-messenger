@@ -5,6 +5,10 @@
  * QueryNameVariables - data we pass to query;
  * QueryNameData - data we get from query.
  */
+
+/**
+ * USERS
+ */
 export type CreateUsernameVariables = {
   username: string;
 };
@@ -32,4 +36,17 @@ export type SearchedUser = {
   id: string;
   username: string;
   image: string;
+};
+
+/**
+ * CONVERSATIONS
+ */
+export type CreateConversationVariables = {
+  participantIds: Array<string>;
+};
+
+export type CreateConversationData = {
+  createConversation: {
+    conversationId: string;
+  };
 };
