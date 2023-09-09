@@ -10,7 +10,7 @@ generator client {
 
 model Account {
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String
+  userId             String @db.ObjectId
   type               String
   provider           String
   providerAccountId  String 
@@ -31,7 +31,7 @@ model Account {
 model Session {
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique @map("session_token")
-  userId       String
+  userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -43,6 +43,8 @@ model User {
   name          String?
   email         String?   @unique
   username      String?   @unique
+  conversations ConversationParticipant[]
+  messages      Message[]
   emailVerified DateTime? @map("email_verified")
   image         String?
   accounts      Account[]
@@ -59,4 +61,36 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+model Conversation {
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  messages        Message[]
+  latestMessageId String     @db.ObjectId @unique
+  latestMessage   Message?   @relation(name: "latestConversationMessage", fields: [latestMessageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  participants    ConversationParticipant[]
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+model ConversationParticipant {
+  id                    String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId                String        @db.ObjectId
+  user                  User          @relation(fields: [userId], references: [id])
+  conversationId        String        @db.ObjectId
+  conversation          Conversation  @relation(fields: [conversationId], references: [id])
+  hasSeenLatestMessage  Boolean
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+}
+
+model Message {
+  id              String        @id @default(auto()) @map("_id") @db.ObjectId
+  conversationId  String        @db.ObjectId
+  conversation    Conversation  @relation(fields: [conversationId], references: [id])
+  senderId        String        @db.ObjectId
+  sender          User          @relation(fields: [senderId], references: [id])
+  isLatestIn      Conversation? @relation("latestConversationMessage")
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
