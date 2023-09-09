@@ -18,6 +18,7 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import { Session } from "next-auth";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import ConversationOperations from "../../../../graphql/operations/conversation";
@@ -37,13 +38,15 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
   } = session;
   const [username, setUsername] = useState("");
   const [participants, setParticipants] = useState<Array<SearchedUser>>([]);
-  const [searchUsers, { data, loading, error }] = useLazyQuery<SearchUsersData, SearchUsersVariables>(
-    UserOperations.Queries.searchUsers,
-  );
+  const [searchUsers, { data: foundUsersData, loading, error }] = useLazyQuery<
+    SearchUsersData,
+    SearchUsersVariables
+  >(UserOperations.Queries.searchUsers);
   const [createConversation, { loading: createConversationLoading }] = useMutation<
     CreateConversationData,
     CreateConversationVariables
   >(ConversationOperations.Mutations.createConversation);
+  const router = useRouter();
 
   const onSubmitSearchUser = (event: React.FormEvent) => {
     event.preventDefault();
@@ -60,7 +63,23 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
       const { data } = await createConversation({
         variables: { participantIds: participantIds },
       });
-      console.log("createConversation returned:", data);
+
+      if (!data?.createConversation) {
+        throw new Error("Failed to create conversation – no data was received from backend.");
+      }
+
+      const {
+        createConversation: { conversationId },
+      } = data;
+
+      /**
+       * On success, push user to the newly created conversation,
+       * reset modal state and close it.
+       */
+      router.push({ query: { conversationId } });
+      setParticipants([]);
+      setUsername("");
+      onClose();
     } catch (error: any) {
       console.log("onCreateConversation error:", error);
       toast.error(error?.message);
@@ -109,7 +128,7 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
               </Stack>
             </form>
             <SearchResultsList
-              users={data?.searchUsers}
+              users={foundUsersData?.searchUsers}
               addParticipant={addParticipant}
               removeParticipant={removeParticipant}
             />
