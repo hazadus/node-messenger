@@ -17,14 +17,13 @@ import {
   ModalOverlay,
   Stack,
 } from "@chakra-ui/react";
+import { Session } from "next-auth";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import ConversationOperations from "../../../../graphql/operations/conversation";
 import UserOperations from "../../../../graphql/operations/user";
 import Participants from "./Participants";
 import SearchResultsList from "./SearchResultsList";
-import { Session } from "next-auth";
-import { log } from "console";
 
 type FindConversationModalProps = {
   isOpen: boolean;
