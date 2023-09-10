@@ -16,6 +16,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
     data: conversationsData,
     error: conversationsError,
     loading: conversationsLoading,
+    // @ts-ignore
   } = useQuery<ConversationsData, null>(ConversationOperations.Queries.conversations);
 
   console.log("conversationsData =", conversationsData);
@@ -27,7 +28,10 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
     >
       <ConversationsNavbar session={session} />
       {/* Insert "Skeleton loader" here  */}
-      <ConversationsList session={session} />
+      <ConversationsList
+        session={session}
+        conversations={conversationsData?.conversations || []}
+      />
     </Box>
   );
 };
