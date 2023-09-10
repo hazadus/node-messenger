@@ -1,12 +1,59 @@
+import { Prisma } from "@prisma/client";
 import { ApolloError } from "apollo-server-core";
 import type { GraphQLContext } from "../../types";
-import _logger from "next-auth/utils/logger";
-import { Prisma } from "@prisma/client";
+import { ConversationPopulated } from "../../types";
 
 const resolvers = {
   Query: {
-    conversations: async (_: any, __: any, context: GraphQLContext) => {
+    /**
+     * Return all conversations where signed in user participates.
+     */
+    conversations: async (
+      _: any,
+      __: any,
+      context: GraphQLContext,
+    ): Promise<Array<ConversationPopulated>> => {
+      const { session, prisma } = context;
+
       console.log("💡 conversations resolver");
+
+      if (!session?.user) {
+        throw new ApolloError("User not authenticated.");
+      }
+
+      const {
+        user: { id: signedInUserId },
+      } = session;
+
+      try {
+        const conversations = await prisma.conversation.findMany({
+          /**
+           * NB!!!
+           *
+           * This is correct, but Shadee said it doesn't work... (Pt.3 1:15)
+           * Let's find out.
+           */
+          where: {
+            participants: {
+              some: {
+                userId: {
+                  equals: signedInUserId,
+                },
+              },
+            },
+          },
+          include: conversationPopulatedInclude,
+        });
+
+        /**
+         * If the above query in fact doesn't work, filter conversations by ourselves like so:
+         * return conversations.filter(conv => conv.participants.find(p => p.userId === signedInUserId))
+         */
+        return conversations;
+      } catch (error: any) {
+        console.log("conversations error:", error);
+        throw new ApolloError(error?.message);
+      }
     },
   },
   Mutation: {

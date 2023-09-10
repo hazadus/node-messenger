@@ -5,6 +5,7 @@ import { Session } from "next-auth";
 import React from "react";
 import ConversationsList from "./ConversationsList";
 import ConversationsNavbar from "./ConversationsNavbar";
+import { ConversationsData } from "@/types";
 
 type ConversationsWrapperProps = {
   session: Session;
@@ -15,7 +16,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
     data: conversationsData,
     error: conversationsError,
     loading: conversationsLoading,
-  } = useQuery(ConversationOperations.Queries.conversations);
+  } = useQuery<ConversationsData, null>(ConversationOperations.Queries.conversations);
 
   console.log("conversationsData =", conversationsData);
 
