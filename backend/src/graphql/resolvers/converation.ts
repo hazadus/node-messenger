@@ -115,7 +115,8 @@ const resolvers = {
         /**
          * This will pass newly created conversation to the clients.
          */
-        pubsub.asyncIterator(["CONVERSATION_CREATED"]);
+        console.log("💡 conversationCreated subscription resolver");
+        return pubsub.asyncIterator(["CONVERSATION_CREATED"]);
       },
     },
   },

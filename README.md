@@ -69,6 +69,15 @@ npx prisma generate --schema=./frontend/src/prisma/schema.prisma
 
 Do `chmod +x ./frontend/docker/initiate_replica.sh`, then `docker compose up -d` to run our very own MongoDB Replica Set. Then `npm run dev` to run the app.
 
+## Mongosh commands
+
+To clear tables in MongoDB, use following commands in `mongosh`:
+
+```
+db.ConversationParticipant.deleteMany({})
+db.Conversation.deleteMany({})
+```
+
 ## References and Links
 
 In this section all the references used while building this application are listed.
