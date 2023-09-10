@@ -27,6 +27,10 @@ Real time messaging web app built using Node, Apollo and Next.js.
     - GraphQL: Syntax Highlighting (by GraphQL Foundation)
     - GraphQL: Language Feature Support (by GraphQL Foundation)
 
+## Questions
+
+- Can we have single Prisma schema file for frontend and backend (to exclude VSCode errors when importing types from backend to frontend)?
+
 ## App Setup in Dev Environment
 
 Run `npm install` in both `backend` and `frontend` directories to install the dependencies.
