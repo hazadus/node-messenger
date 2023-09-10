@@ -7,6 +7,7 @@ import {
 import { ApolloServer } from "apollo-server-express";
 import * as dotenv from "dotenv";
 import express from "express";
+import { PubSub } from "graphql-subscriptions";
 import { useServer } from "graphql-ws/lib/use/ws";
 import http from "http";
 import { getSession } from "next-auth/react";
@@ -27,6 +28,7 @@ async function main() {
   });
 
   const prisma = new PrismaClient();
+  const pubsub = new PubSub();
 
   // Save the returned server's info so we can shutdown this server later
   const serverCleanup = useServer(
@@ -35,11 +37,11 @@ async function main() {
       context: async (ctx: SubscriptionContext): Promise<GraphQLContext> => {
         if (ctx.connectionParams && ctx.connectionParams.session) {
           const { session } = ctx.connectionParams;
-          return { session, prisma };
+          return { session, prisma, pubsub };
         }
 
         // In case the user is not signed in:
-        return { session: null, prisma };
+        return { session: null, prisma, pubsub };
       },
     },
     wsServer,
@@ -57,7 +59,7 @@ async function main() {
     cache: "bounded",
     context: async ({ req, res }): Promise<GraphQLContext> => {
       const session = await getSession({ req });
-      return { session, prisma };
+      return { session, prisma, pubsub };
     },
     plugins: [
       // Proper shutdown for the HTTP server.

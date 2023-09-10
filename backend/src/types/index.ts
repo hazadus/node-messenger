@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
+import { PubSub } from "graphql-subscriptions";
 import { Context } from "graphql-ws";
 import { ISODateString } from "next-auth";
 import { conversationPopulatedInclude, participantPopulatedInclude } from "../graphql/resolvers/converation";
@@ -9,7 +10,7 @@ import { conversationPopulatedInclude, participantPopulatedInclude } from "../gr
 export type GraphQLContext = {
   session: CustomSession | null;
   prisma: PrismaClient;
-  // pubsub
+  pubsub: PubSub;
 };
 
 interface CustomSession {
