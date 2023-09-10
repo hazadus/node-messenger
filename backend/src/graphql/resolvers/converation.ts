@@ -63,7 +63,7 @@ const resolvers = {
       context: GraphQLContext,
     ): Promise<{ conversationId: string }> => {
       const { participantIds } = args;
-      const { session, prisma } = context;
+      const { session, prisma, pubsub } = context;
 
       if (!session?.user) {
         console.log("❌ latestConversationMessage: User not authenticated.");
@@ -91,6 +91,13 @@ const resolvers = {
           include: conversationPopulatedInclude,
         });
 
+        /**
+         * Emit the event via WebSockets.
+         */
+        pubsub.publish("CONVERSATION_CREATED", {
+          conversationCreated: conversation,
+        });
+
         console.log(`✅ Conversation "${conversation.id}" with users "${participantIds}" created.`);
         return {
           conversationId: conversation.id,
@@ -99,6 +106,17 @@ const resolvers = {
         console.log("❌ createConversation error:", error);
         throw new ApolloError("Error creating conversation.");
       }
+    },
+  },
+  Subscription: {
+    conversationCreated: {
+      subscribe: (_: any, __: any, context: GraphQLContext) => {
+        const { pubsub } = context;
+        /**
+         * This will pass newly created conversation to the clients.
+         */
+        pubsub.asyncIterator(["CONVERSATION_CREATED"]);
+      },
     },
   },
 };

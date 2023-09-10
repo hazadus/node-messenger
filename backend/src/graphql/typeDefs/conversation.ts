@@ -12,7 +12,9 @@ const typeDefs = gql`
   }
 
   type Query {
-    # Get all conversations of the user
+    """
+    Get all conversations of the signed in user.
+    """
     conversations: [Conversation]
   }
 
@@ -28,6 +30,10 @@ const typeDefs = gql`
     id: String
     user: User
     hasSeenLatestMessage: Boolean
+  }
+
+  type Subscription {
+    conversationCreated: Conversation
   }
 `;
 
