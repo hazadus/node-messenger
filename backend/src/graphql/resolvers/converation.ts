@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { ApolloError } from "apollo-server-core";
+import { withFilter } from "graphql-subscriptions";
 import type { GraphQLContext } from "../../types";
 import { ConversationPopulated } from "../../types";
 
@@ -110,16 +111,36 @@ const resolvers = {
   },
   Subscription: {
     conversationCreated: {
-      subscribe: (_: any, __: any, context: GraphQLContext) => {
-        const { pubsub } = context;
-        /**
-         * This will pass newly created conversation to the clients.
-         */
-        console.log("💡 conversationCreated subscription resolver");
-        return pubsub.asyncIterator(["CONVERSATION_CREATED"]);
-      },
+      /**
+       * Use `withFilter` to conditionally push updates only to participants of the conversation.
+       * 1st param is the `subscribe` callback itself;
+       * 2nd param callback checks if signed in user is in the conversation.
+       */
+      subscribe: withFilter(
+        (_: any, __: any, context: GraphQLContext) => {
+          const { pubsub } = context;
+          /**
+           * This will pass newly created conversation to the clients.
+           */
+          console.log("💡 conversationCreated subscription resolver");
+          return pubsub.asyncIterator(["CONVERSATION_CREATED"]);
+        },
+        (payload: ConversationCreatedSubscriptionPayload, _, context: GraphQLContext) => {
+          const { session } = context;
+          const {
+            conversationCreated: { participants },
+          } = payload;
+          // `!!` used to convert to boolean
+          const signedInUserIsParticipant = !!participants.find((p) => p.userId === session?.user?.id);
+          return signedInUserIsParticipant;
+        },
+      ),
     },
   },
+};
+
+export type ConversationCreatedSubscriptionPayload = {
+  conversationCreated: ConversationPopulated;
 };
 
 export const participantPopulatedInclude = Prisma.validator<Prisma.ConversationParticipantInclude>()({
