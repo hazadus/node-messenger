@@ -4,6 +4,11 @@ import _logger from "next-auth/utils/logger";
 import { Prisma } from "@prisma/client";
 
 const resolvers = {
+  Query: {
+    conversations: async (_: any, __: any, context: GraphQLContext) => {
+      console.log("💡 conversations resolver");
+    },
+  },
   Mutation: {
     createConversation: async (
       _: any,
@@ -56,6 +61,7 @@ export const participantPopulatedInclude = Prisma.validator<Prisma.ConversationP
     select: {
       id: true,
       username: true,
+      image: true,
     },
   },
 });
@@ -70,6 +76,7 @@ export const conversationPopulatedInclude = Prisma.validator<Prisma.Conversation
         select: {
           id: true,
           username: true,
+          image: true,
         },
       },
     },
