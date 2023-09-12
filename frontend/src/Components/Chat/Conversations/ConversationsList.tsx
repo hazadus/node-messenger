@@ -4,14 +4,26 @@ import React, { useState } from "react";
 import { ConversationPopulated } from "../../../../../backend/src/types";
 import FindConversationModal from "./Modal/FindConversationModal";
 import ConversationItem from "./ConversationItem";
+import { useRouter } from "next/router";
 
 type ConversationsListProps = {
   session: Session;
   conversations: ConversationPopulated[];
+  onViewConversation: (conversationId: string) => void;
 };
 
-const ConversationsList: React.FC<ConversationsListProps> = ({ session, conversations }) => {
+const ConversationsList: React.FC<ConversationsListProps> = ({
+  session,
+  conversations,
+  onViewConversation,
+}) => {
   const [isFindConversationModalOpen, setIsFindConversationModalOpen] = useState(false);
+  const router = useRouter();
+
+  const {
+    user: { id: singedInUserId },
+  } = session;
+  const { conversationId: selectedConversationId } = router.query;
 
   const onOpenFindConversationModal = () => setIsFindConversationModalOpen(true);
   const onCloseFindConversationModal = () => setIsFindConversationModalOpen(false);
@@ -22,7 +34,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({ session, conversa
         px={4}
         py={2}
         mt={2}
-        mb={4}
+        mb={2}
         mx={2}
         bg="blackAlpha.300"
         borderRadius={4}
@@ -48,6 +60,9 @@ const ConversationsList: React.FC<ConversationsListProps> = ({ session, conversa
         <ConversationItem
           key={`conversation-item-id-${conversation.id}`}
           conversation={conversation}
+          isSelected={conversation.id === selectedConversationId}
+          singedInUserId={singedInUserId}
+          onClick={() => onViewConversation(conversation.id)}
         />
       ))}
     </Box>

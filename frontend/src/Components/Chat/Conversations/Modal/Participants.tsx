@@ -31,7 +31,7 @@ const Participants: React.FC<ParticipantsProps> = ({ participants, removePartici
                 src={participant.image}
                 boxSize="20px"
                 borderRadius="full"
-                alt="User Profile Image"
+                alt=""
               />
               <Text>{participant.username}</Text>
               <Icon

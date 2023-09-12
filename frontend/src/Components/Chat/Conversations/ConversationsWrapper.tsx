@@ -3,6 +3,7 @@ import { ConversationsData } from "@/types";
 import { useQuery } from "@apollo/client";
 import { Box } from "@chakra-ui/react";
 import { Session } from "next-auth";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { ConversationPopulated } from "../../../../../backend/src/types";
 import ConversationsList from "./ConversationsList";
@@ -20,8 +21,21 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
     subscribeToMore,
     // @ts-ignore
   } = useQuery<ConversationsData, null>(ConversationOperations.Queries.conversations);
+  const router = useRouter();
+  const { conversationId: selectedConversationId } = router.query;
 
   console.log("🚀 conversationsData =", conversationsData);
+
+  /**
+   * Called when user selects a conversation in the list: push user to this conversation
+   * and mark it as read.
+   * @param conversationId selected conversation's id
+   */
+  const onViewConversation = async (conversationId: string) => {
+    // Push user to conversation with `conversationId`
+    router.push({ query: { conversationId } });
+    // Mark the conversation as read
+  };
 
   const subscribeToNewConversations = () => {
     subscribeToMore({
@@ -56,7 +70,8 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
 
   return (
     <Box
-      width={{ base: "100%", md: "400px" }}
+      display={{ base: selectedConversationId ? "none" : "block", md: "block" }}
+      width={{ base: "100%", md: "600px" }}
       bg="whiteAlpha.50"
     >
       <ConversationsNavbar session={session} />
@@ -64,6 +79,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
       <ConversationsList
         session={session}
         conversations={conversationsData?.conversations || []}
+        onViewConversation={onViewConversation}
       />
     </Box>
   );

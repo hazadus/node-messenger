@@ -41,7 +41,7 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
                     boxSize="40px"
                     borderRadius="full"
                     mr={4}
-                    alt="User Profile Image"
+                    alt=""
                   />
                   <Flex
                     align="center"
