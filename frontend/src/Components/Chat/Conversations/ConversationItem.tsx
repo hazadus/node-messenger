@@ -1,8 +1,9 @@
+import { formatUsernames } from "@/helpers/helpers";
 import { Avatar, AvatarGroup, Flex, Stack, Text } from "@chakra-ui/react";
 import { formatRelative, parseISO } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React from "react";
-import { ConversationPopulated, ParticipantPopulated } from "../../../../../backend/src/types";
+import { ConversationPopulated } from "../../../../../backend/src/types";
 
 type ConversationItemProps = {
   conversation: ConversationPopulated;
@@ -24,14 +25,6 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
   singedInUserId,
   onClick,
 }) => {
-  const formatUsernames = (participants: Array<ParticipantPopulated>, singedInUserId: string): string => {
-    const usernames = participants
-      .filter((participant) => participant.user.id !== singedInUserId)
-      .map((participant) => participant.user.username);
-
-    return usernames.join(", ");
-  };
-
   return (
     <Flex
       p={1}
@@ -49,7 +42,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
       >
         {conversation.participants.map((participant) => (
           <Avatar
-            key={`avatar-id-${participant.user.id}`}
+            key={`conv-list-item-avatar-id-${participant.user.id}`}
             name={participant.user.username || ""}
             src={participant.user.image || ""}
           />
