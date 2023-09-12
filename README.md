@@ -28,6 +28,7 @@ Real time messaging web app built using Node, Apollo and Next.js.
   - VSCode Extensions
     - GraphQL: Syntax Highlighting (by GraphQL Foundation)
     - GraphQL: Language Feature Support (by GraphQL Foundation)
+  - [npm-check-updates](https://www.npmjs.com/package/npm-check-updates): Upgrades your package.json dependencies to the latest versions, ignoring specified versions.
 
 ## Questions
 
