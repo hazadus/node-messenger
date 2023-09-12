@@ -1,8 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { ApolloError } from "apollo-server-core";
 import { withFilter } from "graphql-subscriptions";
 import type { GraphQLContext } from "../../types";
 import { ConversationPopulated } from "../../types";
+import { GraphQLError } from "graphql";
 
 const resolvers = {
   Query: {
@@ -19,7 +19,7 @@ const resolvers = {
       console.log("💡 conversations resolver");
 
       if (!session?.user) {
-        throw new ApolloError("User not authenticated.");
+        throw new GraphQLError("User not authenticated.");
       }
 
       const {
@@ -53,7 +53,7 @@ const resolvers = {
         return conversations;
       } catch (error: any) {
         console.log("conversations error:", error);
-        throw new ApolloError(error?.message);
+        throw new GraphQLError(error?.message);
       }
     },
   },
@@ -68,7 +68,7 @@ const resolvers = {
 
       if (!session?.user) {
         console.log("❌ latestConversationMessage: User not authenticated.");
-        throw new ApolloError("User not authenticated.");
+        throw new GraphQLError("User not authenticated.");
       }
 
       const {
@@ -105,7 +105,7 @@ const resolvers = {
         };
       } catch (error: any) {
         console.log("❌ createConversation error:", error);
-        throw new ApolloError("Error creating conversation.");
+        throw new GraphQLError("Error creating conversation.");
       }
     },
   },

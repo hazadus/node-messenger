@@ -1,4 +1,4 @@
-import { ApolloError } from "apollo-server-core";
+import { GraphQLError } from "graphql";
 import { CreateUsernameResponse, GraphQLContext, CustomUser } from "../../types";
 import { User } from "@prisma/client";
 
@@ -18,7 +18,7 @@ const userResolvers = {
       console.log("💡 searchUsers resolver | usernameToFind =", usernameToFind);
 
       if (!session?.user) {
-        throw new ApolloError("User no authorized.");
+        throw new GraphQLError("User no authorized.");
       }
 
       const {
@@ -39,7 +39,7 @@ const userResolvers = {
         return users;
       } catch (error: any) {
         console.log("❌ searchUsers error:", error);
-        throw new ApolloError(error?.message);
+        throw new GraphQLError(error?.message);
       }
     },
   },
