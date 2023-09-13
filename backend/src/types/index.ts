@@ -14,6 +14,7 @@ export type GraphQLContext = {
 };
 
 interface CustomSession {
+  // We extend basic NextAuth Session with `user.username` field.
   user?: CustomUser;
   expires: ISODateString;
 }
@@ -27,7 +28,6 @@ export interface SubscriptionContext extends Context {
 /**
  * User-related stuff
  */
-
 export type CreateUsernameResponse = {
   success: boolean;
   error: string;
@@ -35,7 +35,7 @@ export type CreateUsernameResponse = {
 
 export interface CustomUser {
   id?: string;
-  username?: string;
+  username?: string; // Our custom field, not present in basic NextAuth User object
   name?: string | null;
   email?: string | null;
   emailVerified?: boolean;

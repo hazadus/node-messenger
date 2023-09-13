@@ -1,11 +1,12 @@
-import { GraphQLError } from "graphql";
-import { CreateUsernameResponse, GraphQLContext, CustomUser } from "../../types";
 import { User } from "@prisma/client";
+import { GraphQLError } from "graphql";
+import { CreateUsernameResponse, GraphQLContext } from "../../types";
 
 const userResolvers = {
   Query: {
     /**
-     * Find a user in the database by username.
+     * Find a user in the database by username, excluding signed in user
+     * from search results.
      */
     searchUsers: async (
       _: any,

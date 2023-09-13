@@ -1,13 +1,14 @@
 import { Prisma } from "@prisma/client";
+import { GraphQLError } from "graphql";
 import { withFilter } from "graphql-subscriptions";
 import type { GraphQLContext } from "../../types";
 import { ConversationPopulated } from "../../types";
-import { GraphQLError } from "graphql";
 
 const resolvers = {
   Query: {
     /**
-     * Return all conversations where signed in user participates.
+     * Return all conversations where signed in user participates,
+     * sorted by updatedAt, desc.
      */
     conversations: async (
       _: any,
@@ -43,6 +44,9 @@ const resolvers = {
               },
             },
           },
+          orderBy: {
+            updatedAt: "desc",
+          },
           include: conversationPopulatedInclude,
         });
 
@@ -58,6 +62,11 @@ const resolvers = {
     },
   },
   Mutation: {
+    /**
+     * Create conversation document in the database, including passed participants.
+     * @param args participantIds: Array<string> - array of participant IDs
+     * @returns `conversationId: string` – ID of the newly created conversation
+     */
     createConversation: async (
       _: any,
       args: { participantIds: Array<string> },
@@ -110,6 +119,9 @@ const resolvers = {
     },
   },
   Subscription: {
+    /**
+     * Fires off when the new conversation is successfully created.
+     */
     conversationCreated: {
       /**
        * Use `withFilter` to conditionally push updates only to participants of the conversation.
@@ -125,6 +137,9 @@ const resolvers = {
           console.log("💡 conversationCreated subscription resolver");
           return pubsub.asyncIterator(["CONVERSATION_CREATED"]);
         },
+        /**
+         * Filter callback function - checks if signed in user is in the conversation.
+         */
         (payload: ConversationCreatedSubscriptionPayload, _, context: GraphQLContext) => {
           const { session } = context;
           const {

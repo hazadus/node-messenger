@@ -81,6 +81,10 @@ async function main() {
     cors<cors.CorsRequest>(corsOptions),
     json(),
     expressMiddleware(server, {
+      /**
+       * Adds session, prisma and pubsub to context that will be
+       * shared across all resolvers.
+       */
       context: async ({ req, res }): Promise<GraphQLContext> => {
         const session = await getSession({ req });
         return { session, prisma, pubsub };
