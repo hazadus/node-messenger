@@ -52,3 +52,15 @@ export type ConversationPopulated = Prisma.ConversationGetPayload<{
 export type ParticipantPopulated = Prisma.ConversationParticipantGetPayload<{
   include: typeof participantPopulatedInclude;
 }>;
+
+/**
+ * Messages
+ */
+
+// Defines arguments for sendMessage GraphQL mutation
+export type SendMessageArguments = {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  body: string;
+};
