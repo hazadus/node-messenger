@@ -1,4 +1,4 @@
-import { ConversationPopulated } from "../../../backend/src/types";
+import { ConversationPopulated, MessagePopulated } from "../../../backend/src/types";
 
 /**
  * Naming convention:
@@ -55,4 +55,15 @@ export type CreateConversationData = {
 
 export type ConversationsData = {
   conversations: Array<ConversationPopulated>;
+};
+
+/**
+ * MESSAGES
+ */
+export type MessagesVariables = {
+  conversationId: string;
+};
+
+export type MessagesData = {
+  messages: Array<MessagePopulated>;
 };
