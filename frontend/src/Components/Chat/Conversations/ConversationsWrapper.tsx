@@ -8,6 +8,7 @@ import React, { useEffect } from "react";
 import { ConversationPopulated } from "../../../../../backend/src/types";
 import ConversationsList from "./ConversationsList";
 import ConversationsNavbar from "./ConversationsNavbar";
+import SkeletonLoader from "@/Components/SkeletonLoader";
 
 type ConversationsWrapperProps = {
   session: Session;
@@ -75,12 +76,19 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
       bg="whiteAlpha.50"
     >
       <ConversationsNavbar session={session} />
-      {/* Insert "Skeleton loader" here  */}
-      <ConversationsList
-        session={session}
-        conversations={conversationsData?.conversations || []}
-        onViewConversation={onViewConversation}
-      />
+      {conversationsLoading ? (
+        <SkeletonLoader
+          count={3}
+          width="100%"
+          height="80px"
+        />
+      ) : (
+        <ConversationsList
+          session={session}
+          conversations={conversationsData?.conversations || []}
+          onViewConversation={onViewConversation}
+        />
+      )}
     </Box>
   );
 };
