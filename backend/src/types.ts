@@ -2,8 +2,8 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { PubSub } from "graphql-subscriptions";
 import { Context } from "graphql-ws";
 import { ISODateString } from "next-auth";
-import { conversationPopulatedInclude, participantPopulatedInclude } from "../graphql/resolvers/converation";
-import { messagePopulated } from "../graphql/resolvers/message";
+import { conversationPopulatedInclude, participantPopulatedInclude } from "./graphql/resolvers/converation";
+import { messagePopulated } from "./graphql/resolvers/message";
 
 /**
  * Server configuration
