@@ -99,9 +99,7 @@ const resolvers = {
         throw new GraphQLError("User not authenticated.");
       }
 
-      const {
-        user: { id: signedInUserId },
-      } = session;
+      const signedInUserId = session.user.id;
       const { id: messageId, senderId, conversationId, body: messageBody } = args;
 
       if (signedInUserId !== senderId) {
@@ -123,6 +121,22 @@ const resolvers = {
         });
 
         /**
+         * Get ConversationParticipant document for signed in user in this
+         * conversation, to use it's ID later.
+         */
+        const signedInUserConversationParticipantDocument = await prisma.conversationParticipant.findFirst({
+          where: {
+            userId: signedInUserId,
+            conversationId: conversationId,
+          },
+        });
+
+        if (!signedInUserConversationParticipantDocument) {
+          console.log("❌ ConversationParticipant for signed in user not found.");
+          throw new GraphQLError("ConversationParticipant for signed in user not found.");
+        }
+
+        /**
          * Update conversation document in the database:
          * - set newly created message as the latest in the conversation;
          * - mark this message as read for sender;
@@ -137,7 +151,7 @@ const resolvers = {
             participants: {
               update: {
                 where: {
-                  id: senderId,
+                  id: signedInUserConversationParticipantDocument.id,
                 },
                 data: {
                   hasSeenLatestMessage: true,
@@ -155,6 +169,7 @@ const resolvers = {
               },
             },
           },
+          include: conversationPopulatedInclude,
         });
 
         /**
