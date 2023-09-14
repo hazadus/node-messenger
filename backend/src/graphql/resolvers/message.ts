@@ -8,7 +8,7 @@ import {
   SendMessageArguments,
 } from "../../types";
 import { userIsConversationParticipant } from "../../helpers";
-import { conversationPopulatedInclude } from "./converation";
+import { conversationPopulatedInclude } from "./conversation";
 
 const resolvers = {
   Query: {

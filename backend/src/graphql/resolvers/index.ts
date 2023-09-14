@@ -1,5 +1,5 @@
 import merge from "lodash.merge";
-import conversationResolvers from "./converation";
+import conversationResolvers from "./conversation";
 import messageResolvers from "./message";
 import userResolvers from "./user";
 
