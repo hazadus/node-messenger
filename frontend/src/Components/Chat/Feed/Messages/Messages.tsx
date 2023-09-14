@@ -48,13 +48,18 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
           direction="column-reverse"
           overflowY="scroll"
           height="100%"
+          px={4}
         >
           {data.messages.map((message) => (
-            <Text key={`message-id-${message.id}`}>{message.body}</Text>
+            <Text
+              key={`message-id-${message.id}`}
+              align={userId === message.sender.id ? "right" : "left"}
+            >
+              {message.sender.username}: {message.body}
+            </Text>
           ))}
         </Flex>
       )}
-      Selected chat ID: {conversationId}, userId {userId}
     </Flex>
   );
 };
