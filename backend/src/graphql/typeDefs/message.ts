@@ -8,6 +8,18 @@ const typeDefs = gql`
     createdAt: Date
   }
 
+  type Query {
+    """
+    Return all messages from the conversation.
+    """
+    messages(
+      """
+      Conversation from which to get messages
+      """
+      conversationId: String
+    ): [Message]
+  }
+
   type Mutation {
     """
     Creates new message document in the database. Updates the conversation document.

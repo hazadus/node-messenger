@@ -1,10 +1,88 @@
 import { Prisma } from "@prisma/client";
 import { GraphQLError } from "graphql";
-import { GraphQLContext, MessageSentSubscriptionPayload, SendMessageArguments } from "../../types";
 import { withFilter } from "graphql-subscriptions";
+import {
+  GraphQLContext,
+  MessagePopulated,
+  MessageSentSubscriptionPayload,
+  SendMessageArguments,
+} from "../../types";
+import { userIsConversationParticipant } from "../../helpers";
+import { conversationPopulatedInclude } from "./converation";
 
 const resolvers = {
-  Query: {},
+  Query: {
+    /**
+     * Get all messages from the conversation. Signed in user must be participant of
+     * this conversation.
+     *
+     * @param args conversationId - conversation from where to get messages
+     */
+    messages: async (
+      _: any,
+      args: { conversationId: string },
+      context: GraphQLContext,
+    ): Promise<Array<MessagePopulated>> => {
+      const { session, prisma } = context;
+      const { conversationId } = args;
+
+      if (!session?.user) {
+        throw new GraphQLError("User not authenticated.");
+      }
+
+      const signedInUserId = session.user.id as string;
+
+      /**
+       * Ensure that conversation exists and signedInUserId participates in
+       * conversation with conversationId.
+       */
+      const conversation = await prisma.conversation.findUnique({
+        where: {
+          id: conversationId,
+        },
+        include: conversationPopulatedInclude,
+      });
+
+      if (!conversation) {
+        console.log(`❌ messages error: conversationId "${conversationId}" not found in the database.`);
+        throw new GraphQLError(`conversationId "${conversationId}" not found in the database.`);
+      }
+
+      const isAllowedToViewMessages = userIsConversationParticipant(
+        conversation.participants,
+        signedInUserId,
+      );
+
+      if (!isAllowedToViewMessages) {
+        console.log(
+          `❌ messages error: user "${signedInUserId}" not allowed to read conversation "${conversationId}".`,
+        );
+        throw new GraphQLError(
+          `User "${signedInUserId}" not allowed to read conversation "${conversationId}".`,
+        );
+      }
+
+      /**
+       * Get messages from the database.
+       */
+      try {
+        const messages = prisma.message.findMany({
+          where: {
+            conversationId: conversationId,
+          },
+          include: messagePopulatedInclude,
+          orderBy: {
+            createdAt: "desc",
+          },
+        });
+
+        return messages;
+      } catch (error: any) {
+        console.log("❌ messages error:", error);
+        throw new GraphQLError(error?.messages);
+      }
+    },
+  },
   Mutation: {
     /**
      * Creates new message document in the database. Updates the conversation document.
@@ -41,7 +119,7 @@ const resolvers = {
             conversationId,
             body: messageBody,
           },
-          include: messagePopulated,
+          include: messagePopulatedInclude,
         });
 
         /**
@@ -122,7 +200,7 @@ const resolvers = {
 /**
  * Define which fields should be included in the entity returned by `Prisma.message.create()`.
  */
-export const messagePopulated = Prisma.validator<Prisma.MessageInclude>()({
+export const messagePopulatedInclude = Prisma.validator<Prisma.MessageInclude>()({
   sender: {
     select: {
       id: true,

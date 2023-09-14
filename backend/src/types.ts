@@ -3,7 +3,7 @@ import { PubSub } from "graphql-subscriptions";
 import { Context } from "graphql-ws";
 import { ISODateString } from "next-auth";
 import { conversationPopulatedInclude, participantPopulatedInclude } from "./graphql/resolvers/converation";
-import { messagePopulated } from "./graphql/resolvers/message";
+import { messagePopulatedInclude } from "./graphql/resolvers/message";
 
 /**
  * Server configuration
@@ -70,4 +70,4 @@ export type MessageSentSubscriptionPayload = {
   messageSent: MessagePopulated;
 };
 
-export type MessagePopulated = Prisma.MessageGetPayload<{ include: typeof messagePopulated }>;
+export type MessagePopulated = Prisma.MessageGetPayload<{ include: typeof messagePopulatedInclude }>;
