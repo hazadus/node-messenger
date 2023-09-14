@@ -67,3 +67,11 @@ export type MessagesVariables = {
 export type MessagesData = {
   messages: Array<MessagePopulated>;
 };
+
+export type MessageSubscriptionData = {
+  subscriptionData: {
+    data: {
+      messageSent: MessagePopulated;
+    };
+  };
+};

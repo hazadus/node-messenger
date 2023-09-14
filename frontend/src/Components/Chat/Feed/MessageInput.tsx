@@ -1,11 +1,11 @@
 import { ApolloError, useMutation } from "@apollo/client";
 import { Box, Input } from "@chakra-ui/react";
+import { ObjectId } from "bson";
 import { Session } from "next-auth";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { SendMessageArguments } from "../../../../../backend/src/types";
 import MessageOperations from "../../../graphql/operations/message";
-import { ObjectId } from "bson";
 
 type MessageInputProps = {
   session: Session;

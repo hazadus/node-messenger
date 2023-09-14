@@ -49,10 +49,13 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
         ))}
       </AvatarGroup>
       <Stack
-        p={2}
+        p={1}
+        spacing={0}
         width="100%"
+        position="relative"
       >
         <Text
+          maxWidth="310px"
           fontWeight={600}
           whiteSpace="nowrap"
           overflow="hidden"
@@ -61,8 +64,20 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           {formatUsernames(conversation.participants, singedInUserId)}
         </Text>
         <Text
+          maxWidth="310px"
           color="whiteAlpha.700"
+          whiteSpace="nowrap"
+          overflow="hidden"
+          textOverflow="ellipsis"
+        >
+          {conversation.latestMessage?.body}
+        </Text>
+        <Text
+          color="whiteAlpha.700"
+          fontSize="14px"
           textAlign="right"
+          position="absolute"
+          right="10px"
         >
           {formatRelative(parseISO(`${conversation.updatedAt}`), new Date(), {
             locale: {
