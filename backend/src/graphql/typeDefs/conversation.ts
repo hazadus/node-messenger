@@ -1,9 +1,12 @@
-import { gql } from "apollo-server-core";
+import { gql } from "graphql-tag";
 
 const typeDefs = gql`
   scalar Date
 
   type Mutation {
+    """
+    Create new conversation with passed user IDs as participants.
+    """
     createConversation(participantIds: [String]): CreateConversationResponse
   }
 
@@ -18,6 +21,9 @@ const typeDefs = gql`
     conversations: [Conversation]
   }
 
+  """
+  Represents a chat in the app.
+  """
   type Conversation {
     id: String
     latestMessage: Message
@@ -33,6 +39,9 @@ const typeDefs = gql`
   }
 
   type Subscription {
+    """
+    Fires off when a conversation is created.
+    """
     conversationCreated: Conversation
   }
 `;

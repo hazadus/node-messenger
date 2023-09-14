@@ -17,8 +17,9 @@ Real time messaging web app built using Node, Apollo and Next.js.
   - [typescript](https://www.npmjs.com/package/typescript): TypeScript is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS.
   - [ts-node](https://www.npmjs.com/package/ts-node): TypeScript execution and REPL for node.js, with source map and native ESM support.
   - [nodemon](https://www.npmjs.com/package/nodemon)
-  - [Apollo Server v3](https://www.apollographql.com/docs/apollo-server/v3)
+  - [Apollo Server v4](https://www.apollographql.com/docs/apollo-server/)
   - [@graphql-tools/schema](https://www.npmjs.com/package/@graphql-tools/schema)
+  - [graphql-tag](https://www.npmjs.com/package/graphql-tag): Helpful utilities for parsing GraphQL queries.
   - [NextAuth.js](https://next-auth.js.org): Authentication for Next.js
   - [Prisma](https://www.prisma.io/docs/getting-started/quickstart)
   - [lodash.merge](https://www.npmjs.com/package/lodash.merge)
@@ -27,6 +28,7 @@ Real time messaging web app built using Node, Apollo and Next.js.
   - VSCode Extensions
     - GraphQL: Syntax Highlighting (by GraphQL Foundation)
     - GraphQL: Language Feature Support (by GraphQL Foundation)
+  - [npm-check-updates](https://www.npmjs.com/package/npm-check-updates): Upgrades your package.json dependencies to the latest versions, ignoring specified versions.
 
 ## Questions
 
