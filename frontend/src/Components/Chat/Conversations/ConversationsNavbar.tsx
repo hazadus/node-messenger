@@ -16,6 +16,7 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
       width="100%"
       bg="whiteAlpha.100"
       flexDirection="row"
+      flexShrink={0}
       align="center"
       justify="space-between"
     >

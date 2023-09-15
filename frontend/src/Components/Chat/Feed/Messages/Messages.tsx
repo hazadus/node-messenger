@@ -1,12 +1,13 @@
+import SkeletonLoader from "@/Components/SkeletonLoader";
+import MessageOperation from "@/graphql/operations/message";
 import { MessagesData, MessagesVariables } from "@/types";
 import { ApolloError, useQuery } from "@apollo/client";
-import { Flex, Stack, Text } from "@chakra-ui/react";
+import { Flex, Stack } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import MessageOperation from "@/graphql/operations/message";
 import toast from "react-hot-toast";
-import SkeletonLoader from "@/Components/SkeletonLoader";
 import MessageOperations from "../../../../graphql/operations/message";
 import { MessageSubscriptionData } from "../../../../types";
+import MessageItem from "./MessageItem";
 
 type MessagesProps = {
   userId: string;
@@ -57,6 +58,7 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
       direction="column"
       justify="flex-end"
       overflow="hidden"
+      flexGrow={1}
     >
       {loading && (
         <Stack px={4}>
@@ -75,12 +77,11 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
           px={4}
         >
           {data.messages.map((message) => (
-            <Text
+            <MessageItem
               key={`message-id-${message.id}`}
-              align={userId === message.sender.id ? "right" : "left"}
-            >
-              {message.sender.username}: {message.body}
-            </Text>
+              message={message}
+              isSentBySignedInUser={userId === message.sender.id}
+            />
           ))}
         </Flex>
       )}

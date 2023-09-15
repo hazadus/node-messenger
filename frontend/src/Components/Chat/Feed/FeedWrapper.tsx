@@ -25,21 +25,14 @@ const FeedWrapper: React.FC<FeedWrapperProps> = ({ session }) => {
     >
       {conversationId ? (
         <>
-          <Flex
-            direction="column"
-            justify="space-between"
-            overflow="hidden"
-            flexGrow={1}
-          >
-            <FeedHeader
-              conversationId={conversationId as string}
-              signedInUserId={singedInUserId}
-            />
-            <Messages
-              userId={singedInUserId}
-              conversationId={conversationId as string}
-            />
-          </Flex>
+          <FeedHeader
+            conversationId={conversationId as string}
+            signedInUserId={singedInUserId}
+          />
+          <Messages
+            userId={singedInUserId}
+            conversationId={conversationId as string}
+          />
           <MessageInput
             session={session}
             conversationId={conversationId as string}

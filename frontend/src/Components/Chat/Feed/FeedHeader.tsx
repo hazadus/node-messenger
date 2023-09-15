@@ -22,6 +22,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ conversationId, signedInUserId 
   return (
     <Flex
       height="60px"
+      flexShrink={0}
       width="100%"
       align="center"
       borderBottom="1px solid"
@@ -29,15 +30,14 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ conversationId, signedInUserId 
     >
       <Button
         display={{ md: "none" }}
-        leftIcon={<AiOutlineArrowLeft />}
-        mx={1}
+        ml={2}
         onClick={() =>
           router.replace("?conversationId", "/", {
             shallow: true,
           })
         }
       >
-        Back
+        <AiOutlineArrowLeft />
       </Button>
       {!conversation && !loading && <Text>Conversation not found!</Text>}
       {conversation && (

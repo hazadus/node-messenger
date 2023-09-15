@@ -15,8 +15,8 @@ type ConversationItemProps = {
 const formatRelativeLocale = {
   lastWeek: "eeee",
   yesterday: "'Yesterday",
-  today: "p",
-  other: "MM/dd/yy",
+  today: "HH:mm",
+  other: "dd.MM.yy",
 };
 
 const ConversationItem: React.FC<ConversationItemProps> = ({
