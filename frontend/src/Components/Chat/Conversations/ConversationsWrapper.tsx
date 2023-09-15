@@ -25,17 +25,23 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
   const router = useRouter();
   const { conversationId: selectedConversationId } = router.query;
 
-  console.log("🚀 conversationsData =", conversationsData);
-
   /**
    * Called when user selects a conversation in the list: push user to this conversation
-   * and mark it as read.
+   * and mark it as read, if needed.
    * @param conversationId selected conversation's id
    */
-  const onViewConversation = async (conversationId: string) => {
-    // Push user to conversation with `conversationId`
+  const onViewConversation = async (conversationId: string, hasSeenLatestMessage: boolean) => {
+    /**
+     * Push user to conversation with `conversationId`
+     */
     router.push({ query: { conversationId } });
-    // Mark the conversation as read
+
+    /**
+     * Mark the conversation as read
+     */
+    if (hasSeenLatestMessage) {
+      return;
+    }
   };
 
   const subscribeToNewConversations = () => {
@@ -49,8 +55,6 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
         if (!subscriptionData.data) {
           return prev;
         }
-
-        console.log("🚀 subscribeToNewConversations -> subscriptionData=", subscriptionData);
 
         const newConversation = subscriptionData.data.conversationCreated;
 

@@ -1,15 +1,15 @@
 import { Box, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
-import React, { useState } from "react";
-import { ConversationPopulated } from "../../../../../backend/src/types";
-import FindConversationModal from "./Modal/FindConversationModal";
-import ConversationItem from "./ConversationItem";
 import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { ConversationPopulated, ParticipantPopulated } from "../../../../../backend/src/types";
+import ConversationItem from "./ConversationItem";
+import FindConversationModal from "./Modal/FindConversationModal";
 
 type ConversationsListProps = {
   session: Session;
   conversations: ConversationPopulated[];
-  onViewConversation: (conversationId: string) => void;
+  onViewConversation: (conversationId: string, hasSeenLatestMessage: boolean) => void;
 };
 
 const ConversationsList: React.FC<ConversationsListProps> = ({
@@ -28,13 +28,16 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
   const onOpenFindConversationModal = () => setIsFindConversationModalOpen(true);
   const onCloseFindConversationModal = () => setIsFindConversationModalOpen(false);
 
+  const getSignedInUserParticipantObject = (conversation: ConversationPopulated) => {
+    return conversation.participants.find((p) => p.user.id === session.user.id) as ParticipantPopulated;
+  };
+
   return (
     <Box width="100%">
       <Box
         px={4}
         py={2}
-        mt={2}
-        mb={2}
+        my={2}
         mx={2}
         bg="blackAlpha.300"
         borderRadius={4}
@@ -56,15 +59,19 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
       </Box>
 
       {/* Conversations list itself */}
-      {conversations.map((conversation) => (
-        <ConversationItem
-          key={`conversation-item-id-${conversation.id}`}
-          conversation={conversation}
-          isSelected={conversation.id === selectedConversationId}
-          singedInUserId={singedInUserId}
-          onClick={() => onViewConversation(conversation.id)}
-        />
-      ))}
+      {conversations.map((conversation) => {
+        const { hasSeenLatestMessage } = getSignedInUserParticipantObject(conversation);
+        return (
+          <ConversationItem
+            key={`conversation-item-id-${conversation.id}`}
+            conversation={conversation}
+            isSelected={conversation.id === selectedConversationId}
+            singedInUserId={singedInUserId}
+            hasSeenLatestMessage={hasSeenLatestMessage}
+            onClick={() => onViewConversation(conversation.id, hasSeenLatestMessage)}
+          />
+        );
+      })}
     </Box>
   );
 };

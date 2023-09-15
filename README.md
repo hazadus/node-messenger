@@ -93,7 +93,9 @@ In this section all the references used while building this application are list
 - MongoDB:
   - [Docker Compose to create replication in MongoDB](https://stackoverflow.com/a/57293443/20197519)
   - [Error: MongoDB error Server selection timeout: No available servers](https://github.com/prisma/prisma/discussions/11929)
-- Apollo v3:
+- Apollo Server:
   - [GraphQL Schema Basics](https://www.apollographql.com/docs/apollo-server/schema/schema)
     - [Example: the `Date` scalar](https://www.apollographql.com/docs/apollo-server/schema/custom-scalars/#:~:text=Example%3A%20The%20Date%20scalar)
   - [Resolvers](https://www.apollographql.com/docs/apollo-server/v3/data/resolvers)
+- Apollo Client:
+  - [Optimistic mutation results](https://www.apollographql.com/docs/react/performance/optimistic-ui/)

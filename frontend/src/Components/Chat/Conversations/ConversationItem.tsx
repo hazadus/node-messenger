@@ -1,14 +1,16 @@
 import { formatUsernames } from "@/helpers/helpers";
-import { Avatar, AvatarGroup, Flex, Stack, Text } from "@chakra-ui/react";
-import { formatRelative, parseISO } from "date-fns";
+import { Avatar, AvatarGroup, Flex, Icon, Stack, Text } from "@chakra-ui/react";
+import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React from "react";
+import { GoDotFill } from "react-icons/go";
 import { ConversationPopulated } from "../../../../../backend/src/types";
 
 type ConversationItemProps = {
   conversation: ConversationPopulated;
   isSelected: boolean;
   singedInUserId: string;
+  hasSeenLatestMessage: boolean;
   onClick: () => void;
 };
 
@@ -23,6 +25,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
   conversation,
   isSelected,
   singedInUserId,
+  hasSeenLatestMessage,
   onClick,
 }) => {
   return (
@@ -31,6 +34,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
       width="100%"
       cursor="pointer"
       bg={isSelected ? "whiteAlpha.200" : "none"}
+      position="relative"
       _hover={{ bg: "whiteAlpha.200" }}
       onClick={onClick}
     >
@@ -87,6 +91,16 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           })}
         </Text>
       </Stack>
+      {/* Unread messages indicator */}
+      {!hasSeenLatestMessage && (
+        <Icon
+          as={GoDotFill}
+          position="absolute"
+          left="-1px"
+          top="24px"
+          color="purple.300"
+        />
+      )}
     </Flex>
   );
 };
