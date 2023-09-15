@@ -46,14 +46,14 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, isSentBySignedInUser
           <Flex justify="right">
             <Tooltip
               hasArrow
-              label={format(new Date(message.createdAt), "dd.MM.yy, HH:mm")}
+              label={format(message.createdAt, "dd.MM.yy, HH:mm")}
               fontSize="10px"
             >
               <Text
                 fontSize="11px"
                 color="whiteAlpha.700"
               >
-                {format(new Date(message.createdAt), "HH:mm")}
+                {format(message.createdAt, "HH:mm")}
               </Text>
             </Tooltip>
           </Flex>

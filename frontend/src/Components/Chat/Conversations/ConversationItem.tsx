@@ -79,7 +79,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           position="absolute"
           right="10px"
         >
-          {formatRelative(parseISO(`${conversation.updatedAt}`), new Date(), {
+          {formatRelative(conversation.updatedAt, new Date(), {
             locale: {
               ...enUS,
               formatRelative: (token) => formatRelativeLocale[token as keyof typeof formatRelativeLocale],
