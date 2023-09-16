@@ -14,6 +14,10 @@ const typeDefs = gql`
     conversationId: String
   }
 
+  type Mutation {
+    markConversationAsRead(conversationId: String!, userid: String!): Boolean
+  }
+
   type Query {
     """
     Get all conversations of the signed in user.

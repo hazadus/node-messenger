@@ -117,6 +117,54 @@ const resolvers = {
         throw new GraphQLError("Error creating conversation.");
       }
     },
+    /**
+     * Mark specified conversation as "read" for specified user.
+     * It is done by setting `hasSeenLatestMessage` to true in
+     * corresponding ConversationParticipant document.
+     *
+     * @param args conversationId: string; userId: string
+     */
+    markConversationAsRead: async (
+      _: any,
+      args: { conversationId: string; userId: string },
+      context: GraphQLContext,
+    ): Promise<boolean> => {
+      const { conversationId, userId } = args;
+      const { session, prisma } = context;
+
+      if (!session?.user) {
+        console.log("❌ markConversationAsRead error: User not authenticated.");
+        throw new GraphQLError("User not authenticated.");
+      }
+
+      try {
+        const conversationParticipant = await prisma.conversationParticipant.findFirst({
+          where: {
+            userId,
+            conversationId,
+          },
+        });
+
+        if (!conversationParticipant) {
+          console.log("❌ ConversationParticipant document not found!");
+          throw new GraphQLError("ConversationParticipant document not found!");
+        }
+
+        await prisma.conversationParticipant.update({
+          where: {
+            id: conversationParticipant.id,
+          },
+          data: {
+            hasSeenLatestMessage: true,
+          },
+        });
+
+        return true;
+      } catch (error: any) {
+        console.log("❌ markConversationAsRead error:", error);
+        throw new GraphQLError(error?.message);
+      }
+    },
   },
   Subscription: {
     /**
