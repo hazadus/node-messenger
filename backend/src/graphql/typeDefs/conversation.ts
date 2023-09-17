@@ -15,7 +15,7 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    markConversationAsRead(conversationId: String!, userid: String!): Boolean
+    markConversationAsRead(conversationId: String!, userId: String!): Boolean
   }
 
   type Query {
