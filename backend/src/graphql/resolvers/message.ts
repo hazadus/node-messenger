@@ -181,7 +181,9 @@ const resolvers = {
         // Payload is of type `MessageSentSubscriptionPayload`:
         pubsub.publish("MESSAGE_SENT", { messageSent: newMessage });
         // Payload is of type `ConversationUpdatedSubscriptionPayload`:
-        pubsub.publish("CONVERSATION_UPDATED", { conversationUpdated: { updatedConversation } });
+        pubsub.publish("CONVERSATION_UPDATED", {
+          conversationUpdated: { conversation: updatedConversation },
+        });
       } catch (error: any) {
         console.log("❌ sendMessage error:", error);
         throw new GraphQLError("Error sending message.");

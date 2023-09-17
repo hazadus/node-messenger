@@ -36,6 +36,7 @@ Real time messaging web app built using Node, Apollo and Next.js.
 - Can we have single Prisma schema file for frontend and backend (to exclude VSCode errors when importing types from backend to frontend)?
 - [RTFM](https://www.apollographql.com/docs/apollo-server/data/subscriptions/): we defined `messageSent` subscription with `conversationId` arg. Where exactly it comes from when resolver is called?..
 - [RTFM](https://www.apollographql.com/docs/react/data/queries): Apollo Client (React) Queries.
+- RTFM: in `ConversationsWrapper.tsx`, subscription to `conversationUpdated` updates the list of conversations. How it exactly works?..
 
 ## App Setup in Dev Environment
 

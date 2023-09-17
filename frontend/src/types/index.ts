@@ -57,6 +57,13 @@ export type ConversationsData = {
   conversations: Array<ConversationPopulated>;
 };
 
+// Used in `conversationUpdated` subscription
+export type ConversationUpdatedData = {
+  conversationUpdated: {
+    conversation: ConversationPopulated;
+  };
+};
+
 /**
  * MESSAGES
  */

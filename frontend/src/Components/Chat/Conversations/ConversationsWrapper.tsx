@@ -1,7 +1,7 @@
 import SkeletonLoader from "@/Components/SkeletonLoader";
 import ConversationOperations from "@/graphql/operations/conversation";
-import { ConversationsData } from "@/types";
-import { useMutation, useQuery } from "@apollo/client";
+import { ConversationsData, ConversationUpdatedData } from "@/types";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { Box } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
@@ -31,6 +31,19 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
     { markConversationAsRead: boolean },
     { conversationId: string; userId: string }
   >(ConversationOperations.Mutations.markConversationAsRead);
+
+  /**
+   * Subscribe to conversation updates.
+   */
+  useSubscription<ConversationUpdatedData>(ConversationOperations.Subscriptions.conversationUpdated, {
+    onData: ({ client, data }) => {
+      const { data: subscriptionData } = data;
+
+      if (!subscriptionData) {
+        return;
+      }
+    },
+  });
 
   /**
    * Called when user selects a conversation in the list: push user to this conversation
