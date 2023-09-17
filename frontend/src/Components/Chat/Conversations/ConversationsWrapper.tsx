@@ -1,14 +1,15 @@
+import SkeletonLoader from "@/Components/SkeletonLoader";
 import ConversationOperations from "@/graphql/operations/conversation";
 import { ConversationsData } from "@/types";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { Box } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import toast from "react-hot-toast";
 import { ConversationPopulated } from "../../../../../backend/src/types";
 import ConversationsList from "./ConversationsList";
 import ConversationsNavbar from "./ConversationsNavbar";
-import SkeletonLoader from "@/Components/SkeletonLoader";
 
 type ConversationsWrapperProps = {
   session: Session;
@@ -24,6 +25,12 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
   } = useQuery<ConversationsData, null>(ConversationOperations.Queries.conversations);
   const router = useRouter();
   const { conversationId: selectedConversationId } = router.query;
+  const signedInUserId = session.user.id;
+
+  const [markConversationAsRead] = useMutation<
+    { markConversationAsRead: boolean },
+    { conversationId: string; userId: string }
+  >(ConversationOperations.Mutations.markConversationAsRead);
 
   /**
    * Called when user selects a conversation in the list: push user to this conversation
@@ -41,6 +48,18 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
      */
     if (hasSeenLatestMessage) {
       return;
+    }
+
+    try {
+      await markConversationAsRead({
+        variables: {
+          userId: signedInUserId,
+          conversationId,
+        },
+      });
+    } catch (error: any) {
+      console.log("onViewConversation error:", error);
+      toast.error(error?.message);
     }
   };
 
