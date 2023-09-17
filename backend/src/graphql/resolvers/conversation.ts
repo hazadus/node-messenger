@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { GraphQLError } from "graphql";
 import { withFilter } from "graphql-subscriptions";
-import type { GraphQLContext } from "../../types";
+import type { ConversationUpdatedSubscriptionPayload, GraphQLContext } from "../../types";
 import { ConversationPopulated } from "../../types";
 
 const resolvers = {
@@ -194,6 +194,39 @@ const resolvers = {
             conversationCreated: { participants },
           } = payload;
           // `!!` used to convert to boolean
+          const signedInUserIsParticipant = !!participants.find((p) => p.userId === session?.user?.id);
+          return signedInUserIsParticipant;
+        },
+      ),
+    },
+    conversationUpdated: {
+      /**
+       * Fires off when conversation gets updated: new message created,
+       * conversation marked as read, etc.
+       */
+      subscribe: withFilter(
+        (_: any, __: any, context: GraphQLContext) => {
+          const { pubsub } = context;
+          console.log("💡 conversationUpdated subscription resolver");
+          return pubsub.asyncIterator(["CONVERSATION_UPDATED"]);
+        },
+        /**
+         * Filter callback function - checks if signed in user is in the conversation.
+         */
+        (payload: ConversationUpdatedSubscriptionPayload, _, context: GraphQLContext) => {
+          const { session } = context;
+
+          if (!session?.user) {
+            throw new GraphQLError("User not authenticated.");
+          }
+
+          const signedInUserId = session.user.id;
+          const {
+            conversationUpdated: {
+              conversation: { participants },
+            },
+          } = payload;
+
           const signedInUserIsParticipant = !!participants.find((p) => p.userId === session?.user?.id);
           return signedInUserIsParticipant;
         },

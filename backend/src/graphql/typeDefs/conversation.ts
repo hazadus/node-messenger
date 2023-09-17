@@ -15,6 +15,10 @@ const typeDefs = gql`
   }
 
   type Mutation {
+    """
+    Marks conversation as read by setting hasReadLatestMessage to true for the
+    user in corresponding ConversationParticipant document.
+    """
     markConversationAsRead(conversationId: String!, userId: String!): Boolean
   }
 
@@ -47,6 +51,17 @@ const typeDefs = gql`
     Fires off when a conversation is created.
     """
     conversationCreated: Conversation
+  }
+
+  type Subscription {
+    """
+    Fires off when conversation gets updated: new message created, conversation marked as read, etc.
+    """
+    conversationUpdated: ConversationUpdatedSubscriptionPayload
+  }
+
+  type ConversationUpdatedSubscriptionPayload {
+    conversation: Conversation
   }
 `;
 
