@@ -15,7 +15,7 @@ type MessagesProps = {
 };
 
 const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
-  const { data, loading, error, subscribeToMore } = useQuery<MessagesData, MessagesVariables>(
+  const { data, loading, error, subscribeToMore, refetch } = useQuery<MessagesData, MessagesVariables>(
     MessageOperation.Query.messages,
     {
       variables: {
@@ -49,6 +49,7 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
 
   useEffect(() => {
     const unsubscribe = subscribeToMoreMessages(conversationId);
+    refetch();
 
     return () => unsubscribe();
   }, [conversationId]);
