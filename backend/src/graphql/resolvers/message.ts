@@ -149,6 +149,7 @@ const resolvers = {
           data: {
             latestMessageId: newMessage.id,
             participants: {
+              // Update sender - set `hasSeenLatestMessage` to true
               update: {
                 where: {
                   id: signedInUserConversationParticipantDocument.id,
@@ -158,7 +159,9 @@ const resolvers = {
                 },
               },
               updateMany: {
+                // Update all other participants - set `hasSeenLatestMessage` to false.
                 where: {
+                  conversationId: conversationId,
                   NOT: {
                     userId: senderId,
                   },
