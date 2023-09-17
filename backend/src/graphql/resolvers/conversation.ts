@@ -130,7 +130,7 @@ const resolvers = {
       context: GraphQLContext,
     ): Promise<boolean> => {
       const { conversationId, userId } = args;
-      const { session, prisma } = context;
+      const { session, prisma, pubsub } = context;
 
       if (!session?.user) {
         console.log("❌ markConversationAsRead error: User not authenticated.");
@@ -157,6 +157,20 @@ const resolvers = {
           data: {
             hasSeenLatestMessage: true,
           },
+        });
+
+        /**
+         * Send CONVERSATION_UPDATED event to all subscribers to update
+         * `hasSeenLatestMessage` for all clients.
+         */
+        const updatedConversation = await prisma.conversation.findUnique({
+          where: {
+            id: conversationId,
+          },
+          include: conversationPopulatedInclude,
+        });
+        pubsub.publish("CONVERSATION_UPDATED", {
+          conversationUpdated: { conversation: updatedConversation },
         });
 
         return true;
