@@ -21,8 +21,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
     error: conversationsError,
     loading: conversationsLoading,
     subscribeToMore,
-    // @ts-ignore
-  } = useQuery<ConversationsData, null>(ConversationOperations.Queries.conversations);
+  } = useQuery<ConversationsData>(ConversationOperations.Queries.conversations);
   const router = useRouter();
   const { conversationId: selectedConversationId } = router.query;
   const signedInUserId = session.user.id;
