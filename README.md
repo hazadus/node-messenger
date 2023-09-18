@@ -78,6 +78,24 @@ db.ConversationParticipant.deleteMany({})
 db.Conversation.deleteMany({})
 ```
 
+## Running App on the Server
+
+Create `frontend/.env` file with the following variables:
+
+```
+NEXTAUTH_URL="..."
+NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
+GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
+GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
+DATABASE_URL="mongodb://mongodb1:27017/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
+```
+
+Note that we use `mongodb1:27017` for MongoDB – service name from Docker Compose and internal port number.
+
+Backend config...
+
+Run `docker compose up -d` from the base app directory.
+
 ## References and Links
 
 In this section all the references used while building this application are listed.

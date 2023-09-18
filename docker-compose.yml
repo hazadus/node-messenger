@@ -1,5 +1,15 @@
 version: "3"
 services:
+  next-app:
+    container_name: next-app
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    networks:
+      - alphanetwork
+    ports:
+      - 3000:3000
+
   mongodb1:
     image: mongo:latest
     networks:
