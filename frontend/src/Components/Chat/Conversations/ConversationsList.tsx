@@ -24,6 +24,9 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
     user: { id: singedInUserId },
   } = session;
   const { conversationId: selectedConversationId } = router.query;
+  const sortedConversations = [...conversations].sort(
+    (a, b) => b.updatedAt.valueOf() - a.updatedAt.valueOf(),
+  );
 
   const onOpenFindConversationModal = () => setIsFindConversationModalOpen(true);
   const onCloseFindConversationModal = () => setIsFindConversationModalOpen(false);
@@ -59,7 +62,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
       </Box>
 
       {/* Conversations list itself */}
-      {conversations.map((conversation) => {
+      {sortedConversations.map((conversation) => {
         const { hasSeenLatestMessage } = getSignedInUserParticipantObject(conversation);
         return (
           <ConversationItem
