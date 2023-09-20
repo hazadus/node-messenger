@@ -111,3 +111,7 @@ In this section all the references used while building this application are list
   - [Resolvers](https://www.apollographql.com/docs/apollo-server/v3/data/resolvers)
 - Apollo Client:
   - [Optimistic mutation results](https://www.apollographql.com/docs/react/performance/optimistic-ui/)
+
+## Repo Activity
+
+![Alt](https://repobeats.axiom.co/api/embed/21c79b52d6fde99a0e41724deef17b2a9d67570d.svg "Repobeats analytics image")
