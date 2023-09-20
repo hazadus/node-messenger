@@ -54,6 +54,7 @@ Create `frontend/.env.local` with the following environment variables:
 
 ```
 NEXTAUTH_URL="http://localhost:3000"
+GRAPHQL_HOST="localhost:4000"
 NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
 GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
 GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
@@ -80,10 +81,14 @@ db.Conversation.deleteMany({})
 
 ## Running App on the Server
 
+Add app domain to Authorized origins in [Google Cloud Console](https://console.cloud.google.com/) -> APIs & Services -> Credentials.
+
 Create `frontend/.env` file with the following variables:
 
 ```
-NEXTAUTH_URL="..."
+# Domain where app is deployed:
+NEXTAUTH_URL="http://messenger.hazadus.ru"
+GRAPHQL_HOST="messenger.hazadus.ru:4000"
 NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
 GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
 GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
@@ -92,7 +97,7 @@ DATABASE_URL="mongodb://mongodb1:27017/messenger?replicaSet=rs0&retryWrites=true
 
 Note that we use `mongodb1:27017` for MongoDB – service name from Docker Compose and internal port number.
 
-Backend config...
+To configure backend, you should set `CLIENT_ORIGIN` environment variable in `docker-compose.yml`, e.g. `CLIENT_ORIGIN=http://messenger.hazadus.ru`.
 
 Run `docker compose up -d` from the base app directory.
 
