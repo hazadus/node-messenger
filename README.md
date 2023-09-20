@@ -54,11 +54,31 @@ Create `frontend/.env.local` with the following environment variables:
 
 ```
 NEXTAUTH_URL="http://localhost:3000"
-GRAPHQL_HOST="localhost:4000"
 NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
 GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
 GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
 DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
+```
+
+Edit GraphQL endpoint URLs in `/frontend/graphql/apollo-client.ts`, e.g.:
+
+```typescript
+const httpLink = new HttpLink({
+  uri: `http://localhost:4000/graphql`,
+  credentials: "include",
+});
+
+const wsLink =
+  typeof window !== "undefined"
+    ? new GraphQLWsLink(
+        createClient({
+          url: `ws://localhost:4000/graphql/subscriptions`,
+          connectionParams: async () => ({
+            session: await getSession(),
+          }),
+        }),
+      )
+    : null;
 ```
 
 Generate Prisma Client:
@@ -88,11 +108,31 @@ Create `frontend/.env` file with the following variables:
 ```
 # Domain where app is deployed:
 NEXTAUTH_URL="http://messenger.hazadus.ru"
-GRAPHQL_HOST="messenger.hazadus.ru:4000"
 NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
 GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
 GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
 DATABASE_URL="mongodb://mongodb1:27017/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
+```
+
+Edit GraphQL endpoint URLs in `/frontend/graphql/apollo-client.ts`, e.g.:
+
+```typescript
+const httpLink = new HttpLink({
+  uri: `http://messenger.hazadus.ru:4000/graphql`,
+  credentials: "include",
+});
+
+const wsLink =
+  typeof window !== "undefined"
+    ? new GraphQLWsLink(
+        createClient({
+          url: `ws://messenger.hazadus.ru:4000/graphql/subscriptions`,
+          connectionParams: async () => ({
+            session: await getSession(),
+          }),
+        }),
+      )
+    : null;
 ```
 
 Note that we use `mongodb1:27017` for MongoDB – service name from Docker Compose and internal port number.
