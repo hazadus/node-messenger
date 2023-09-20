@@ -22,9 +22,9 @@ services:
     environment:
       # NB: do not use quotes below :))
       - CLIENT_ORIGIN=http://messenger.hazadus.ru
+      - NEXTAUTH_URL=http://messenger.hazadus.ru
       # Internal URLs
       - DATABASE_URL=mongodb://mongodb1:27017/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true
-      - NEXTAUTH_URL=http://next-app:80
 
   mongodb1:
     image: mongo:latest
