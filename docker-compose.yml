@@ -21,7 +21,7 @@ services:
       - 4000:4000
     environment:
       # NB: do not use quotes below :))
-      - CLIENT_ORIGIN=http://localhost:80
+      - CLIENT_ORIGIN=http://messenger.hazadus.ru
       # Internal URLs
       - DATABASE_URL=mongodb://mongodb1:27017/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true
       - NEXTAUTH_URL=http://next-app:80
