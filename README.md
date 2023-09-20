@@ -101,7 +101,7 @@ Run `docker compose up -d` from the base app directory.
 In this section all the references used while building this application are listed.
 
 - [Shadee Merhi's Video Tutorial](https://www.youtube.com/watch?v=mj_Qe2jBYS4)
-- [Google Cloud Console](https://console.cloud.google.com/)
+- [Google Cloud Console](https://console.cloud.google.com/): APIs & Services -> Credentials.
 - MongoDB:
   - [Docker Compose to create replication in MongoDB](https://stackoverflow.com/a/57293443/20197519)
   - [Error: MongoDB error Server selection timeout: No available servers](https://github.com/prisma/prisma/discussions/11929)

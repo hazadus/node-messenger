@@ -10,6 +10,6 @@ COPY ./backend/package-lock.json  ./backend/
 WORKDIR /app/backend
 RUN npm ci
 RUN npx prisma generate --schema=src/prisma/schema.prisma
-RUN npm install -g ts-node typescript '@types/node'
+RUN npm install -g ts-node tslib '@types/node'
 
 CMD ["ts-node", "src/server.ts"]

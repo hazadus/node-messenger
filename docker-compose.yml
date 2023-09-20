@@ -8,7 +8,7 @@ services:
     networks:
       - alphanetwork
     ports:
-      - 3000:3000
+      - 80:3000
 
   api:
     container_name: api
@@ -20,8 +20,11 @@ services:
     ports:
       - 4000:4000
     environment:
-      - CLIENT_ORIGIN="http://localhost:3000"
-      - DATABASE_URL="mongodb://mongodb1:27017/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
+      # NB: do not use quotes below :))
+      - CLIENT_ORIGIN=http://localhost:80
+      # Internal URLs
+      - DATABASE_URL=mongodb://mongodb1:27017/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true
+      - NEXTAUTH_URL=http://next-app:80
 
   mongodb1:
     image: mongo:latest

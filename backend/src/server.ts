@@ -72,12 +72,13 @@ async function main() {
 
   // Ref: https://www.apollographql.com/docs/apollo-server/v3/security/cors#configuring-cors-options-for-apollo-server
   const corsOptions = {
-    origin: process.env.CLIENT_ORIGIN, // `origin` can be a list
+    origin: [process.env.CLIENT_ORIGIN, "http://localhost:3000", "http://localhost"],
     credentials: true, // alows server to accept auth headers
   };
 
   app.use(
     "/graphql",
+    // @ts-ignore
     cors<cors.CorsRequest>(corsOptions),
     json(),
     expressMiddleware(server, {
@@ -97,7 +98,8 @@ async function main() {
   });
 
   console.log(`🚀 Node Messenger Server ready at http://localhost:4000/graphql`);
-  console.log(`🧰 CLIENT_ORIGIN =`, process.env.CLIENT_ORIGIN);
+  console.log(`🧰 corsOptions.origin =`, corsOptions.origin);
+  console.log(`🧰 NEXTAUTH_URL =`, process.env.NEXTAUTH_URL);
 }
 
 main().catch((error) => console.log("❌ Node Messenger Server error:", error));
