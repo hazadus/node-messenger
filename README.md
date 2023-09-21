@@ -1,6 +1,10 @@
-# Node Messenger
+# Node Messenger 💬
 
 Real time messaging web app built using Node, Apollo and Next.js.
+
+Check out the current version deployed at http://messenger.hazadus.ru. Drop me a message there! 😀
+
+Thanks to [Shadee Merhi](https://github.com/shadeemerhi) for his amazing [video tutorial](https://www.youtube.com/watch?v=mj_Qe2jBYS4), which was used as the base for this project.
 
 ## Frameworks and libraries used
 
@@ -15,9 +19,6 @@ Real time messaging web app built using Node, Apollo and Next.js.
   - [date-fns](https://www.npmjs.com/package/date-fns): date-fns provides the most comprehensive, yet simple and consistent toolset for manipulating JavaScript dates in a browser & Node.js.
   - [bson](https://www.npmjs.com/package/bson): BSON is short for "Binary JSON," and is the binary-encoded serialization of JSON-like documents. Used to generate IDs for MongoDB documents.
 - Backend
-  - [typescript](https://www.npmjs.com/package/typescript): TypeScript is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS.
-  - [ts-node](https://www.npmjs.com/package/ts-node): TypeScript execution and REPL for node.js, with source map and native ESM support.
-  - [nodemon](https://www.npmjs.com/package/nodemon)
   - [Apollo Server v4](https://www.apollographql.com/docs/apollo-server/)
   - [@graphql-tools/schema](https://www.npmjs.com/package/@graphql-tools/schema)
   - [graphql-tag](https://www.npmjs.com/package/graphql-tag): Helpful utilities for parsing GraphQL queries.
@@ -29,6 +30,9 @@ Real time messaging web app built using Node, Apollo and Next.js.
   - VSCode Extensions
     - GraphQL: Syntax Highlighting (by GraphQL Foundation)
     - GraphQL: Language Feature Support (by GraphQL Foundation)
+  - [typescript](https://www.npmjs.com/package/typescript): TypeScript is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS.
+  - [ts-node](https://www.npmjs.com/package/ts-node): TypeScript execution and REPL for node.js, with source map and native ESM support.
+  - [nodemon](https://www.npmjs.com/package/nodemon) is a tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected.
   - [npm-check-updates](https://www.npmjs.com/package/npm-check-updates): Upgrades your package.json dependencies to the latest versions, ignoring specified versions.
 
 ## App Setup in Dev Environment
@@ -71,15 +75,6 @@ npx prisma generate --schema=./frontend/src/prisma/schema.prisma
 
 Do `chmod +x ./frontend/docker/initiate_replica.sh`, then `docker compose up -d` to run our very own MongoDB Replica Set. Then `npm run dev` to run the app.
 
-## Mongosh commands
-
-To clear tables in MongoDB, use following commands in `mongosh`:
-
-```
-db.ConversationParticipant.deleteMany({})
-db.Conversation.deleteMany({})
-```
-
 ## Running App on the Server
 
 Add app domain to Authorized origins in [Google Cloud Console](https://console.cloud.google.com/) -> APIs & Services -> Credentials.
@@ -105,6 +100,17 @@ To configure backend, you should set `CLIENT_ORIGIN` environment variable in `do
 Run `docker compose up -d` from the base app directory.
 
 ## References and Links
+
+### Mongosh commands
+
+To clear tables in MongoDB, use following commands in `mongosh`:
+
+```
+db.ConversationParticipant.deleteMany({})
+db.Conversation.deleteMany({})
+```
+
+### Links
 
 In this section all the references used while building this application are listed.
 
