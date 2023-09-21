@@ -60,12 +60,18 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
           <Avatar size="md" />
         )}
         <Flex>
-          <Button
-            bg="none"
-            onClick={onOpenFindConversationModal}
+          <Tooltip
+            label="New Chat"
+            fontSize="10px"
+            hasArrow
           >
-            <BsChatLeftDotsFill size={20} />
-          </Button>
+            <Button
+              bg="none"
+              onClick={onOpenFindConversationModal}
+            >
+              <BsChatLeftDotsFill size={20} />
+            </Button>
+          </Tooltip>
           <Menu>
             <MenuButton
               cursor="pointer"
