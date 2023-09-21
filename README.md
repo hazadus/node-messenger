@@ -40,6 +40,7 @@ Run `npm install` in both `backend` and `frontend` directories to install the de
 Create `backend/.env` with the following environment variables:
 
 ```
+NEXTAUTH_URL="http://localhost:3000"
 CLIENT_ORIGIN=http://localhost:3000
 DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
 ```
@@ -53,6 +54,7 @@ Then `npm run dev` to run the app using `nodemon`.
 Create `frontend/.env.local` with the following environment variables:
 
 ```
+NEXT_PUBLIC_BACKEND_HOST="localhost:4000"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
 GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
@@ -78,12 +80,36 @@ db.ConversationParticipant.deleteMany({})
 db.Conversation.deleteMany({})
 ```
 
+## Running App on the Server
+
+Add app domain to Authorized origins in [Google Cloud Console](https://console.cloud.google.com/) -> APIs & Services -> Credentials.
+
+Create `frontend/.env` file with the following variables:
+
+```
+# Domain where app is deployed:
+NEXT_PUBLIC_BACKEND_HOST="messenger.hazadus.ru:4000"
+NEXTAUTH_URL="http://messenger.hazadus.ru"
+NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
+GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
+GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
+DATABASE_URL="mongodb://mongodb1:27017/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
+```
+
+Next.js will insert `NEXT_PUBLIC_BACKEND_HOST` value into `frontend/src/graphql/apollo-client.ts` during build time.
+
+Note that we use `mongodb1:27017` for MongoDB – service name from Docker Compose and internal port number.
+
+To configure backend, you should set `CLIENT_ORIGIN` environment variable in `docker-compose.yml`, e.g. `CLIENT_ORIGIN=http://messenger.hazadus.ru`.
+
+Run `docker compose up -d` from the base app directory.
+
 ## References and Links
 
 In this section all the references used while building this application are listed.
 
 - [Shadee Merhi's Video Tutorial](https://www.youtube.com/watch?v=mj_Qe2jBYS4)
-- [Google Cloud Console](https://console.cloud.google.com/)
+- [Google Cloud Console](https://console.cloud.google.com/): APIs & Services -> Credentials.
 - MongoDB:
   - [Docker Compose to create replication in MongoDB](https://stackoverflow.com/a/57293443/20197519)
   - [Error: MongoDB error Server selection timeout: No available servers](https://github.com/prisma/prisma/discussions/11929)
@@ -93,6 +119,8 @@ In this section all the references used while building this application are list
   - [Resolvers](https://www.apollographql.com/docs/apollo-server/v3/data/resolvers)
 - Apollo Client:
   - [Optimistic mutation results](https://www.apollographql.com/docs/react/performance/optimistic-ui/)
+- Next.js:
+  - [Bundling Environment Variables for the Browser](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables#bundling-environment-variables-for-the-browser)
 
 ## Repo Activity
 
