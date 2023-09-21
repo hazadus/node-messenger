@@ -40,6 +40,7 @@ Run `npm install` in both `backend` and `frontend` directories to install the de
 Create `backend/.env` with the following environment variables:
 
 ```
+NEXTAUTH_URL="http://localhost:3000"
 CLIENT_ORIGIN=http://localhost:3000
 DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
 ```
@@ -53,32 +54,12 @@ Then `npm run dev` to run the app using `nodemon`.
 Create `frontend/.env.local` with the following environment variables:
 
 ```
+NEXT_PUBLIC_BACKEND_HOST="localhost:4000"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
 GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
 GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
 DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
-```
-
-Edit GraphQL endpoint URLs in `/frontend/graphql/apollo-client.ts`, e.g.:
-
-```typescript
-const httpLink = new HttpLink({
-  uri: `http://localhost:4000/graphql`,
-  credentials: "include",
-});
-
-const wsLink =
-  typeof window !== "undefined"
-    ? new GraphQLWsLink(
-        createClient({
-          url: `ws://localhost:4000/graphql/subscriptions`,
-          connectionParams: async () => ({
-            session: await getSession(),
-          }),
-        }),
-      )
-    : null;
 ```
 
 Generate Prisma Client:
@@ -107,6 +88,7 @@ Create `frontend/.env` file with the following variables:
 
 ```
 # Domain where app is deployed:
+NEXT_PUBLIC_BACKEND_HOST="messenger.hazadus.ru:4000"
 NEXTAUTH_URL="http://messenger.hazadus.ru"
 NEXTAUTH_SECRET=<Generate using `openssl rand -base64 32` command>
 GOOGLE_CLIENT_ID=<Get it in the Google Cloud Console>
@@ -114,26 +96,7 @@ GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
 DATABASE_URL="mongodb://mongodb1:27017/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
 ```
 
-Edit GraphQL endpoint URLs in `/frontend/graphql/apollo-client.ts`, e.g.:
-
-```typescript
-const httpLink = new HttpLink({
-  uri: `http://messenger.hazadus.ru:4000/graphql`,
-  credentials: "include",
-});
-
-const wsLink =
-  typeof window !== "undefined"
-    ? new GraphQLWsLink(
-        createClient({
-          url: `ws://messenger.hazadus.ru:4000/graphql/subscriptions`,
-          connectionParams: async () => ({
-            session: await getSession(),
-          }),
-        }),
-      )
-    : null;
-```
+Next.js will insert `NEXT_PUBLIC_BACKEND_HOST` value into `frontend/src/graphql/apollo-client.ts` during build time.
 
 Note that we use `mongodb1:27017` for MongoDB – service name from Docker Compose and internal port number.
 
@@ -156,6 +119,8 @@ In this section all the references used while building this application are list
   - [Resolvers](https://www.apollographql.com/docs/apollo-server/v3/data/resolvers)
 - Apollo Client:
   - [Optimistic mutation results](https://www.apollographql.com/docs/react/performance/optimistic-ui/)
+- Next.js:
+  - [Bundling Environment Variables for the Browser](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables#bundling-environment-variables-for-the-browser)
 
 ## Repo Activity
 
