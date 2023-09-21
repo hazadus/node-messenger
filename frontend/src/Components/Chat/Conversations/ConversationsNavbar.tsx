@@ -19,6 +19,8 @@ import { BsChatLeftDotsFill } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { MdOutlineLogout } from "react-icons/md";
 import FindConversationModal from "./Modal/FindConversationModal";
+import UserProfileModal from "./Modal/UserProfileModal";
+import AboutAppModal from "./Modal/AboutAppModal";
 
 type ConversationsNavbarProps = {
   session: Session;
@@ -26,9 +28,17 @@ type ConversationsNavbarProps = {
 
 const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) => {
   const [isFindConversationModalOpen, setIsFindConversationModalOpen] = useState(false);
+  const [isUserProfileModalOpen, setIsUserProfileModalOpen] = useState(false);
+  const [isAboutAppModalOpen, setIsAboutAppModalOpen] = useState(false);
 
   const onOpenFindConversationModal = () => setIsFindConversationModalOpen(true);
   const onCloseFindConversationModal = () => setIsFindConversationModalOpen(false);
+
+  const onOpenUserProfileModal = () => setIsUserProfileModalOpen(true);
+  const onCloseUserProfileModal = () => setIsUserProfileModalOpen(false);
+
+  const onOpenAboutAppModal = () => setIsAboutAppModalOpen(true);
+  const onCloseAboutAppModal = () => setIsAboutAppModalOpen(false);
 
   return (
     <>
@@ -54,10 +64,16 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
               boxSize="40px"
               borderRadius="full"
               alt=""
+              cursor="pointer"
+              onClick={onOpenUserProfileModal}
             />
           </Tooltip>
         ) : (
-          <Avatar size="md" />
+          <Avatar
+            size="md"
+            cursor="pointer"
+            onClick={onOpenUserProfileModal}
+          />
         )}
         <Flex>
           <Tooltip
@@ -108,6 +124,7 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
                 fontWeight={700}
                 bg="#2D2D2D"
                 _hover={{ bg: "whiteAlpha.300" }}
+                onClick={onOpenUserProfileModal}
               >
                 <Flex
                   align="center"
@@ -153,7 +170,7 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
                 fontWeight={700}
                 bg="#2D2D2D"
                 _hover={{ bg: "whiteAlpha.300" }}
-                onClick={() => {}}
+                onClick={onOpenAboutAppModal}
               >
                 <Flex align="center">
                   <Icon
@@ -206,6 +223,15 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
         isOpen={isFindConversationModalOpen}
         onClose={onCloseFindConversationModal}
         session={session}
+      />
+      <UserProfileModal
+        isOpen={isUserProfileModalOpen}
+        onClose={onCloseUserProfileModal}
+        session={session}
+      />
+      <AboutAppModal
+        isOpen={isAboutAppModalOpen}
+        onClose={onCloseAboutAppModal}
       />
     </>
   );
