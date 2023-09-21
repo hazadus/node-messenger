@@ -1,13 +1,11 @@
 import { formatUsernames } from "@/helpers/helpers";
-import { Avatar, AvatarGroup, Flex, Icon, Menu, MenuItem, MenuList, Stack, Text } from "@chakra-ui/react";
+import { Avatar, AvatarGroup, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React, { useState } from "react";
-import { AiOutlineDelete } from "react-icons/ai";
-import { FiEdit } from "react-icons/fi";
 import { GoDotFill } from "react-icons/go";
-import { IoExitOutline } from "react-icons/io5";
 import { ConversationPopulated } from "../../../../../backend/src/types";
+import ConversationMenu from "../ConversationMenu";
 
 type ConversationItemProps = {
   conversation: ConversationPopulated;
@@ -53,38 +51,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
       onClick={handleClick}
       onContextMenu={handleClick}
     >
-      {/* Context menu (hidden) */}
-      <Menu
-        isOpen={isMenuOpen}
-        onClose={() => setIsMenuOpen(false)}
-        isLazy
-      >
-        <MenuList bg="#2D2D2D">
-          <MenuItem
-            icon={<FiEdit fontSize={18} />}
-            bg="#2D2D2D"
-            _hover={{ bg: "WhiteAlpha.300" }}
-            isDisabled
-          >
-            Edit
-          </MenuItem>
-          <MenuItem
-            icon={<IoExitOutline fontSize={19} />}
-            bg="#2D2D2D"
-            _hover={{ bg: "WhiteAlpha.300" }}
-            isDisabled
-          >
-            Leave
-          </MenuItem>
-          <MenuItem
-            icon={<AiOutlineDelete fontSize={19} />}
-            bg="#2D2D2D"
-            _hover={{ bg: "whiteAlpha.300" }}
-          >
-            Delete
-          </MenuItem>
-        </MenuList>
-      </Menu>
+      {/* Conversation item itself */}
       <AvatarGroup
         size="md"
         max={2}
@@ -137,6 +104,15 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
             },
           })}
         </Text>
+        {/* Conversation "context" menu */}
+        <Flex
+          position="absolute"
+          top="22px"
+          right="5px"
+          onClick={(event) => event.preventDefault()}
+        >
+          <ConversationMenu iconType="chevron" />
+        </Flex>
       </Stack>
       {/* Unread messages indicator */}
       {!hasSeenLatestMessage && (
