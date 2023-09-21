@@ -21,6 +21,7 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, isSentBySignedInUser
         {!isSentBySignedInUser && (
           <Avatar
             src={message.sender.image || ""}
+            size="md"
             mt={1}
           />
         )}

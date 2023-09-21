@@ -51,17 +51,18 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ conversationId, signedInUserId 
             <AvatarGroup
               mr={2}
               size="md"
-              max={2}
               spacing="-20px"
               pl={2}
             >
-              {conversation.participants.map((participant) => (
-                <Avatar
-                  key={`feed-header-avatar-id-${participant.user.id}`}
-                  name={participant.user.username || ""}
-                  src={participant.user.image || ""}
-                />
-              ))}
+              {conversation.participants
+                .filter((participant) => participant.user.id !== signedInUserId)
+                .map((participant) => (
+                  <Avatar
+                    key={`feed-header-avatar-id-${participant.user.id}`}
+                    name={participant.user.username || ""}
+                    src={participant.user.image || ""}
+                  />
+                ))}
             </AvatarGroup>
             <Text>{formatUsernames(conversation.participants, signedInUserId)}</Text>
           </Flex>

@@ -53,28 +53,18 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
         align="center"
         justify="space-between"
       >
-        {session.user.image ? (
-          <Tooltip
-            hasArrow
-            label={session.user.username}
-            placement="right"
-          >
-            <Image
-              src={session.user.image}
-              boxSize="40px"
-              borderRadius="full"
-              alt=""
-              cursor="pointer"
-              onClick={onOpenUserProfileModal}
-            />
-          </Tooltip>
-        ) : (
+        <Tooltip
+          label={session.user.username}
+          placement="right"
+          hasArrow
+        >
           <Avatar
+            src={session.user.image || ""}
             size="md"
             cursor="pointer"
             onClick={onOpenUserProfileModal}
           />
-        )}
+        </Tooltip>
         <Flex>
           <Tooltip
             label="New Chat"

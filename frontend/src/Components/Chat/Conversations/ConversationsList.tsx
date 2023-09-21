@@ -91,7 +91,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
             key={`conversation-item-id-${conversation.id}`}
             conversation={conversation}
             isSelected={conversation.id === selectedConversationId}
-            singedInUserId={singedInUserId}
+            signedInUserId={singedInUserId}
             hasSeenLatestMessage={hasSeenLatestMessage}
             onClick={() => onViewConversation(conversation.id, hasSeenLatestMessage)}
           />

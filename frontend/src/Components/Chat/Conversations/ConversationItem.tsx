@@ -2,7 +2,7 @@ import { formatUsernames } from "@/helpers/helpers";
 import { Avatar, AvatarGroup, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
-import React, { useState } from "react";
+import React from "react";
 import { GoDotFill } from "react-icons/go";
 import { ConversationPopulated } from "../../../../../backend/src/types";
 import ConversationMenu from "../ConversationMenu";
@@ -10,7 +10,7 @@ import ConversationMenu from "../ConversationMenu";
 type ConversationItemProps = {
   conversation: ConversationPopulated;
   isSelected: boolean;
-  singedInUserId: string;
+  signedInUserId: string;
   hasSeenLatestMessage: boolean;
   onClick: () => void;
 };
@@ -25,21 +25,10 @@ const formatRelativeLocale = {
 const ConversationItem: React.FC<ConversationItemProps> = ({
   conversation,
   isSelected,
-  singedInUserId,
+  signedInUserId,
   hasSeenLatestMessage,
   onClick,
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleClick = (event: React.MouseEvent) => {
-    if (event.type === "click") {
-      onClick();
-    } else if (event.type === "contextmenu") {
-      event.preventDefault();
-      setIsMenuOpen(true);
-    }
-  };
-
   return (
     <Flex
       p={1}
@@ -48,23 +37,24 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
       bg={isSelected ? "whiteAlpha.200" : "none"}
       position="relative"
       _hover={{ bg: "whiteAlpha.200" }}
-      onClick={handleClick}
-      onContextMenu={handleClick}
+      onClick={onClick}
     >
       {/* Conversation item itself */}
       <AvatarGroup
         size="md"
-        max={2}
+        max={3}
         spacing="-30px"
         pl={2}
       >
-        {conversation.participants.map((participant) => (
-          <Avatar
-            key={`conv-list-item-avatar-id-${participant.user.id}`}
-            name={participant.user.username || ""}
-            src={participant.user.image || ""}
-          />
-        ))}
+        {conversation.participants
+          .filter((participant) => participant.user.id !== signedInUserId)
+          .map((participant) => (
+            <Avatar
+              key={`conv-list-item-avatar-id-${participant.user.id}`}
+              name={participant.user.username || ""}
+              src={participant.user.image || ""}
+            />
+          ))}
       </AvatarGroup>
       <Stack
         p={1}
@@ -79,7 +69,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           overflow="hidden"
           textOverflow="ellipsis"
         >
-          {formatUsernames(conversation.participants, singedInUserId)}
+          {formatUsernames(conversation.participants, signedInUserId)}
         </Text>
         <Text
           maxWidth="310px"
