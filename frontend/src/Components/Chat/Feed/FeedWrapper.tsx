@@ -72,7 +72,7 @@ const FeedWrapper: React.FC<FeedWrapperProps> = ({ session }) => {
                 maxWidth="70%"
                 mx="auto"
               >
-                It'd be nice if you drop a line to the developer of this app, my username is hazadus👋!
+                It would be nice if you drop a line to the developer of this app, my username is hazadus👋!
               </Text>
             </Flex>
           </Flex>

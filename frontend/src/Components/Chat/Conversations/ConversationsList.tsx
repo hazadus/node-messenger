@@ -68,7 +68,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
             textAlign="center"
             color="whiteAlpha.700"
           >
-            Chats filtered by "{searchText}"
+            Chats filtered by &laquo;{searchText}&raquo;
           </Text>
         </Flex>
       )}

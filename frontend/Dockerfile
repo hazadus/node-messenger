@@ -15,6 +15,10 @@ COPY ./frontend/public ./frontend/public
 COPY ./frontend/next.config.js ./frontend/
 COPY ./frontend/tsconfig.json ./frontend/
 COPY ./frontend/.env ./frontend/
+COPY ./frontend/.sentryclirc ./frontend/
+COPY ./frontend/sentry.client.config.ts ./frontend/
+COPY ./frontend/sentry.edge.config.ts ./frontend/
+COPY ./frontend/sentry.server.config.ts ./frontend/
 
 # Install backend dependencies
 WORKDIR /app/backend
