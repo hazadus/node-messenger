@@ -2,7 +2,7 @@ import { ApolloError, useMutation } from "@apollo/client";
 import { Box, Input } from "@chakra-ui/react";
 import { ObjectId } from "bson";
 import { Session } from "next-auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { SendMessageArguments } from "../../../../../backend/src/types";
 import MessageOperations from "../../../graphql/operations/message";
@@ -62,6 +62,16 @@ const MessageInput: React.FC<MessageInputProps> = ({ session, conversationId }) 
     }
   };
 
+  /**
+   * Auto-focus message input when new conversation is selected in
+   * the conversations list.
+   */
+  let messageInput: HTMLInputElement | null = null;
+
+  useEffect(() => {
+    if (messageInput) messageInput.focus();
+  }, [messageInput, conversationId]);
+
   return (
     <Box
       px={4}
@@ -71,6 +81,7 @@ const MessageInput: React.FC<MessageInputProps> = ({ session, conversationId }) 
       <form onSubmit={onSendMessage}>
         <Input
           value={messageBody}
+          ref={(input) => (messageInput = input)}
           placeholder="Enter your message"
           resize="none"
           onChange={(event) => setMessageBody(event.target.value)}
