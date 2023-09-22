@@ -13,20 +13,19 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, isSentBySignedInUser
     // Full message "line"
     <Flex justify={isSentBySignedInUser ? "right" : "left"}>
       {/* Avatar + Message */}
-      <Stack
-        maxWidth="60%"
-        direction="row"
-      >
+      <Stack direction="row">
         {/* User avatar */}
         {!isSentBySignedInUser && (
           <Avatar
             src={message.sender.image || ""}
+            size="md"
             mt={1}
           />
         )}
         {/* Message block */}
         <Stack
           minWidth="120px"
+          maxWidth={{ base: "80%", md: "464px" }}
           py={1}
           px={2}
           bgColor={isSentBySignedInUser ? "brand.100" : "whiteAlpha.300"}

@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import React from "react";
@@ -40,7 +40,42 @@ const FeedWrapper: React.FC<FeedWrapperProps> = ({ session }) => {
         </>
       ) : (
         <>
-          <div>No chat selected.</div>
+          <Flex
+            width="100%"
+            height="100%"
+            justify="center"
+            align="center"
+          >
+            <Flex
+              direction="column"
+              p={8}
+              maxWidth="700px"
+              borderRadius={4}
+              bg="whiteAlpha.300"
+            >
+              <Text
+                textAlign="center"
+                mb={4}
+                fontSize="2xl"
+                fontWeight={500}
+              >
+                Welcome to Node Messenger! 💬
+              </Text>
+              <Text
+                textAlign="center"
+                mb={4}
+              >
+                Please select or create new chat.
+              </Text>
+              <Text
+                textAlign="center"
+                maxWidth="70%"
+                mx="auto"
+              >
+                It'd be nice if you drop a line to the developer of this app, my username is hazadus👋!
+              </Text>
+            </Flex>
+          </Flex>
         </>
       )}
     </Flex>

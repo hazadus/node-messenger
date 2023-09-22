@@ -71,11 +71,12 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
         </Stack>
       )}
       {data?.messages && (
+        // Messages containter
         <Flex
           direction="column-reverse"
           overflowY="scroll"
           height="100%"
-          px={4}
+          px={{ base: 4, md: 8, "2xl": "20%" }}
         >
           {data.messages.map((message) => (
             <MessageItem

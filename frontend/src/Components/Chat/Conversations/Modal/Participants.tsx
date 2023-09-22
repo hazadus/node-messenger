@@ -1,5 +1,5 @@
 import { SearchedUser } from "@/types";
-import { Flex, Icon, Image, Stack, Text } from "@chakra-ui/react";
+import { Avatar, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 
@@ -27,11 +27,10 @@ const Participants: React.FC<ParticipantsProps> = ({ participants, removePartici
               py={1}
               borderRadius="4px"
             >
-              <Image
+              <Avatar
                 src={participant.image}
-                boxSize="20px"
-                borderRadius="full"
-                alt=""
+                name={participant.username}
+                size="xs"
               />
               <Text>{participant.username}</Text>
               <Icon

@@ -10,7 +10,7 @@ const theme = extendTheme(
   {
     colors: {
       brand: {
-        100: "#3D84F7",
+        100: "#805AD5",
       },
     },
     styles: {

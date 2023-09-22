@@ -2,11 +2,22 @@ import SkeletonLoader from "@/Components/SkeletonLoader";
 import ConversationOperations from "@/graphql/operations/conversation";
 import { ConversationsData, ConversationUpdatedData } from "@/types";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
-import { Box } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  Input,
+  InputGroup,
+  InputLeftElement,
+  InputRightElement,
+  Tooltip,
+} from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { BsFilterCircleFill, BsSearch } from "react-icons/bs";
+import { LuListFilter, LuDelete } from "react-icons/lu";
 import { ConversationPopulated } from "../../../../../backend/src/types";
 import ConversationsList from "./ConversationsList";
 import ConversationsNavbar from "./ConversationsNavbar";
@@ -25,6 +36,9 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
   const router = useRouter();
   const { conversationId: selectedConversationId } = router.query;
   const signedInUserId = session.user.id;
+
+  const [searchText, setSearchText] = useState("");
+  const [showUnreadOnly, setShowUnreadOnly] = useState(false);
 
   const [markConversationAsRead] = useMutation<
     { markConversationAsRead: boolean },
@@ -138,7 +152,53 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
       width={{ base: "100%", md: "600px" }}
       bg="whiteAlpha.50"
     >
+      {/* Navbar */}
       <ConversationsNavbar session={session} />
+
+      {/* Search & filter */}
+      <Flex
+        width="100%"
+        p={1}
+      >
+        <InputGroup>
+          <InputLeftElement
+            pointerEvents="none"
+            color="gray.600"
+          >
+            <BsSearch />
+          </InputLeftElement>
+          <Input
+            mr={1}
+            placeholder="Search chats..."
+            value={searchText}
+            onChange={(event) => setSearchText(event.target.value)}
+          />
+          {searchText.length > 0 && (
+            <InputRightElement
+              p={0}
+              cursor="pointer"
+              onClick={() => setSearchText("")}
+            >
+              <LuDelete size={20} />
+            </InputRightElement>
+          )}
+        </InputGroup>
+        <Tooltip
+          label="Filter unread"
+          fontSize="10px"
+          hasArrow
+        >
+          <Button
+            bg="none"
+            p={0}
+            onClick={() => setShowUnreadOnly(!showUnreadOnly)}
+          >
+            {showUnreadOnly ? <BsFilterCircleFill size={20} /> : <LuListFilter size={20} />}
+          </Button>
+        </Tooltip>
+      </Flex>
+
+      {/* List */}
       {conversationsLoading ? (
         <SkeletonLoader
           count={3}
@@ -150,6 +210,8 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
           session={session}
           conversations={conversationsData?.conversations || []}
           onViewConversation={onViewConversation}
+          searchText={searchText}
+          showUnreadOnly={showUnreadOnly}
         />
       )}
     </Box>
