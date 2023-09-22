@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ConversationOperations from "../../../../graphql/operations/conversation";
 import UserOperations from "../../../../graphql/operations/user";
@@ -107,14 +107,14 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
           bg="#2D2D2D"
           pb={4}
         >
-          <ModalHeader>Create new Chat</ModalHeader>
+          <ModalHeader>Create New Chat</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <form onSubmit={onSubmitSearchUser}>
               <Stack spacing={4}>
                 <Input
-                  placeholder="Enter a username to find"
                   value={username}
+                  placeholder="Enter a username to find"
                   isDisabled={loading}
                   onChange={(event) => setUsername(event.target.value)}
                 />
