@@ -1,6 +1,6 @@
-import React from "react";
 import { SearchedUser } from "@/types";
-import { Flex, Stack, Text, Image, Button } from "@chakra-ui/react";
+import { Avatar, Button, Flex, Stack, Text } from "@chakra-ui/react";
+import React from "react";
 
 type SearchResultsListProps = {
   users?: Array<SearchedUser>;
@@ -36,12 +36,11 @@ const SearchResultsList: React.FC<SearchResultsListProps> = ({
                   _hover={{ bg: "whiteAlpha.200" }}
                   onClick={() => addParticipant(user)}
                 >
-                  <Image
+                  <Avatar
                     src={user.image}
-                    boxSize="40px"
-                    borderRadius="full"
+                    name={user.username}
+                    size="md"
                     mr={4}
-                    alt=""
                   />
                   <Flex
                     align="center"
