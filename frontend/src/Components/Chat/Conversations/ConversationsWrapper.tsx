@@ -17,7 +17,9 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BsFilterCircleFill, BsSearch } from "react-icons/bs";
-import { LuListFilter, LuDelete } from "react-icons/lu";
+import { LuDelete, LuListFilter } from "react-icons/lu";
+// @ts-ignore
+import useSound from "use-sound";
 import { ConversationPopulated } from "../../../../../backend/src/types";
 import ConversationsList from "./ConversationsList";
 import ConversationsNavbar from "./ConversationsNavbar";
@@ -45,6 +47,8 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
     { conversationId: string; userId: string }
   >(ConversationOperations.Mutations.markConversationAsRead);
 
+  const [playNotificationSound] = useSound("/sounds/come-here-notification.mp3");
+
   /**
    * Subscribe to conversation updates.
    */
@@ -58,6 +62,15 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
       if (!subscriptionData) {
         return;
       }
+
+      /**
+       * Play notification sound.
+       *
+       * TODO: check if there's actually new message in the conversation
+       * (latest message has changed). Because we do not want to play sounds
+       * when, for example, conversation was just marked as read.
+       */
+      playNotificationSound();
 
       /**
        * If we received update on conversation which is currently open,

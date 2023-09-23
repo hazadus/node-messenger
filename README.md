@@ -26,6 +26,7 @@ Thanks to [Shadee Merhi](https://github.com/shadeemerhi) for his amazing [video 
   - [Prisma](https://www.prisma.io/docs/getting-started/quickstart)
   - [lodash.merge](https://www.npmjs.com/package/lodash.merge)
   - [dotenv](https://www.npmjs.com/package/dotenv): Dotenv is a zero-dependency module that loads environment variables from a `.env` file into `process.env`.
+  - [use-sound](https://www.npmjs.com/package/use-sound): A React Hook for Sound Effects.
 - Tools
   - VSCode Extensions
     - GraphQL: Syntax Highlighting (by GraphQL Foundation)
@@ -127,6 +128,9 @@ In this section all the references used while building this application are list
   - [Optimistic mutation results](https://www.apollographql.com/docs/react/performance/optimistic-ui/)
 - Next.js:
   - [Bundling Environment Variables for the Browser](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables#bundling-environment-variables-for-the-browser)
+- Sounds:
+  - [A React Hook for Sound Effects](https://www.joshwcomeau.com/react/announcing-use-sound-react-hook/)
+  - [Come Here Notification](https://notificationsounds.com/notification-sounds/come-here-notification)
 
 ## Repo Activity
 
