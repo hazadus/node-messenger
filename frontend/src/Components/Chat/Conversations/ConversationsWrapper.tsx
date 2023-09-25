@@ -161,9 +161,12 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
   }, []);
 
   return (
-    <Box
+    <Flex
       display={{ base: selectedConversationId ? "none" : "block", md: "block" }}
+      direction="column"
       width={{ base: "100%", md: "600px" }}
+      height="100vh"
+      overflow="hidden"
       bg="whiteAlpha.50"
     >
       {/* Navbar */}
@@ -228,7 +231,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
           showUnreadOnly={showUnreadOnly}
         />
       )}
-    </Box>
+    </Flex>
   );
 };
 

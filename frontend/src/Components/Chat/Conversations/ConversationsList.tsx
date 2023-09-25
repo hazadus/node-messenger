@@ -59,7 +59,12 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
   }
 
   return (
-    <Box width="100%">
+    <Flex
+      direction="column"
+      width="100%"
+      h="calc(100vh - 110px)"
+      overflow="hidden"
+    >
       {/* Filter info */}
       {searchText.length > 0 && (
         <Flex p={2}>
@@ -84,20 +89,27 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
         </Flex>
       )}
       {/* Conversations list itself */}
-      {filteredConversations.map((conversation) => {
-        const { hasSeenLatestMessage } = getSignedInUserParticipantObject(conversation);
-        return (
-          <ConversationItem
-            key={`conversation-item-id-${conversation.id}`}
-            conversation={conversation}
-            isSelected={conversation.id === selectedConversationId}
-            signedInUserId={singedInUserId}
-            hasSeenLatestMessage={hasSeenLatestMessage}
-            onClick={() => onViewConversation(conversation.id, hasSeenLatestMessage)}
-          />
-        );
-      })}
-    </Box>
+      <Flex
+        direction="column"
+        height="100%"
+        overflowX="hidden"
+        overflowY="scroll"
+      >
+        {filteredConversations.map((conversation) => {
+          const { hasSeenLatestMessage } = getSignedInUserParticipantObject(conversation);
+          return (
+            <ConversationItem
+              key={`conversation-item-id-${conversation.id}`}
+              conversation={conversation}
+              isSelected={conversation.id === selectedConversationId}
+              signedInUserId={singedInUserId}
+              hasSeenLatestMessage={hasSeenLatestMessage}
+              onClick={() => onViewConversation(conversation.id, hasSeenLatestMessage)}
+            />
+          );
+        })}
+      </Flex>
+    </Flex>
   );
 };
 
