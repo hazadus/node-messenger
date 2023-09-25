@@ -2,12 +2,21 @@ import SkeletonLoader from "@/Components/SkeletonLoader";
 import MessageOperation from "@/graphql/operations/message";
 import { MessagesData, MessagesVariables } from "@/types";
 import { ApolloError, useQuery } from "@apollo/client";
-import { Flex, Stack } from "@chakra-ui/react";
+import { Flex, Stack, Text } from "@chakra-ui/react";
+import { formatRelative } from "date-fns";
+import enUS from "date-fns/locale/en-US";
 import React, { useEffect } from "react";
 import toast from "react-hot-toast";
 import MessageOperations from "../../../../graphql/operations/message";
 import { MessageSubscriptionData } from "../../../../types";
 import MessageItem from "./MessageItem";
+
+const formatRelativeLocale = {
+  lastWeek: "eeee",
+  yesterday: "'Yesterday",
+  today: "'Today",
+  other: "do LLLL, yyyy",
+};
 
 type MessagesProps = {
   userId: string;
@@ -78,13 +87,56 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
           height="100%"
           px={{ base: 4, md: 8, "2xl": "20%" }}
         >
-          {data.messages.map((message) => (
-            <MessageItem
-              key={`message-id-${message.id}`}
-              message={message}
-              isSentBySignedInUser={userId === message.sender.id}
-            />
-          ))}
+          {data.messages.map((message, index) => {
+            /**
+             * We want to show date only when the date of current message is > than date of
+             * previous message, like in Telegram or WhatsApp web.
+             */
+            let dateCaption = null;
+            const prevIndex = index + 1;
+            if (prevIndex < data.messages.length) {
+              const prevMessage = data.messages[prevIndex];
+              const currentMessageDate = new Date(message.createdAt).getDate();
+              const previousMessageDate = new Date(prevMessage.createdAt).getDate();
+
+              if (currentMessageDate != previousMessageDate) {
+                /**
+                 * Apply relative date formatting.
+                 */
+                dateCaption = formatRelative(message.createdAt, new Date(), {
+                  locale: {
+                    ...enUS,
+                    formatRelative: (token) =>
+                      formatRelativeLocale[token as keyof typeof formatRelativeLocale],
+                  },
+                });
+              }
+            }
+
+            return (
+              <>
+                <MessageItem
+                  key={`message-id-${message.id}`}
+                  message={message}
+                  isSentBySignedInUser={userId === message.sender.id}
+                />
+                {dateCaption && (
+                  <Flex
+                    justify="center"
+                    my={1}
+                  >
+                    <Text
+                      bg="whiteAlpha.300"
+                      px={2}
+                      borderRadius={4}
+                    >
+                      {dateCaption}
+                    </Text>
+                  </Flex>
+                )}
+              </>
+            );
+          })}
         </Flex>
       )}
     </Flex>
