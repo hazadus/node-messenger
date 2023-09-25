@@ -1,6 +1,7 @@
 import SkeletonLoader from "@/Components/SkeletonLoader";
 import ConversationOperations from "@/graphql/operations/conversation";
 import { ConversationsData, ConversationUpdatedData } from "@/types";
+import { getIsSoundEnabled } from "@/utils/utils";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import {
   Box,
@@ -70,7 +71,7 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
        * (latest message has changed). Because we do not want to play sounds
        * when, for example, conversation was just marked as read.
        */
-      playNotificationSound();
+      if (getIsSoundEnabled()) playNotificationSound();
 
       /**
        * If we received update on conversation which is currently open,

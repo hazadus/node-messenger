@@ -3,7 +3,6 @@ import {
   Button,
   Flex,
   Icon,
-  Image,
   Menu,
   MenuButton,
   MenuDivider,
@@ -13,23 +12,28 @@ import {
 } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BiDotsVertical, BiHelpCircle } from "react-icons/bi";
 import { BsChatLeftDotsFill } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
+import { GoMute, GoUnmute } from "react-icons/go";
 import { MdOutlineLogout } from "react-icons/md";
+import { useStickyState } from "../../../utils/utils";
+import AboutAppModal from "./Modal/AboutAppModal";
 import FindConversationModal from "./Modal/FindConversationModal";
 import UserProfileModal from "./Modal/UserProfileModal";
-import AboutAppModal from "./Modal/AboutAppModal";
 
 type ConversationsNavbarProps = {
   session: Session;
 };
 
 const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) => {
+  const [isClient, setIsClient] = useState(false);
   const [isFindConversationModalOpen, setIsFindConversationModalOpen] = useState(false);
   const [isUserProfileModalOpen, setIsUserProfileModalOpen] = useState(false);
   const [isAboutAppModalOpen, setIsAboutAppModalOpen] = useState(false);
+
+  const [isSoundEnabled, setIsSoundEnabled] = useStickyState("isSoundEnabled", true);
 
   const onOpenFindConversationModal = () => setIsFindConversationModalOpen(true);
   const onCloseFindConversationModal = () => setIsFindConversationModalOpen(false);
@@ -39,6 +43,10 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
 
   const onOpenAboutAppModal = () => setIsAboutAppModalOpen(true);
   const onCloseAboutAppModal = () => setIsAboutAppModalOpen(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   return (
     <>
@@ -123,21 +131,25 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
                   Profile
                 </Flex>
               </MenuItem>
-              <MenuItem
-                height="40px"
-                fontSize="10pt"
-                fontWeight={700}
-                bg="#2D2D2D"
-                _hover={{ bg: "whiteAlpha.300" }}
-                isDisabled
-              >
-                <Flex
-                  align="center"
-                  ml="40px"
+              {isClient && (
+                <MenuItem
+                  height="40px"
+                  fontSize="10pt"
+                  fontWeight={700}
+                  bg="#2D2D2D"
+                  _hover={{ bg: "whiteAlpha.300" }}
+                  onClick={() => setIsSoundEnabled(!isSoundEnabled)}
                 >
-                  Sounds On/Off
-                </Flex>
-              </MenuItem>
+                  <Flex align="center">
+                    <Icon
+                      as={isSoundEnabled ? GoUnmute : GoMute}
+                      fontSize={20}
+                      mx="10px"
+                    />
+                    Sounds:&nbsp;{isSoundEnabled ? <span>On</span> : <span>Off</span>}
+                  </Flex>
+                </MenuItem>
+              )}
               <MenuDivider />
               <MenuItem
                 height="40px"

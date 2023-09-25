@@ -18,6 +18,7 @@ Thanks to [Shadee Merhi](https://github.com/shadeemerhi) for his amazing [video 
   - [react-icons](https://react-icons.github.io/react-icons/): Include popular icons in your React projects easily with react-icons, which utilizes ES6 imports that allows you to include only the icons that your project is using.
   - [date-fns](https://www.npmjs.com/package/date-fns): date-fns provides the most comprehensive, yet simple and consistent toolset for manipulating JavaScript dates in a browser & Node.js.
   - [bson](https://www.npmjs.com/package/bson): BSON is short for "Binary JSON," and is the binary-encoded serialization of JSON-like documents. Used to generate IDs for MongoDB documents.
+  - [npm-check-updates](https://www.npmjs.com/package/npm-check-updates): Upgrades your package.json dependencies to the latest versions, ignoring specified versions.
 - Backend
   - [Apollo Server v4](https://www.apollographql.com/docs/apollo-server/)
   - [@graphql-tools/schema](https://www.npmjs.com/package/@graphql-tools/schema)
@@ -34,7 +35,6 @@ Thanks to [Shadee Merhi](https://github.com/shadeemerhi) for his amazing [video 
   - [typescript](https://www.npmjs.com/package/typescript): TypeScript is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS.
   - [ts-node](https://www.npmjs.com/package/ts-node): TypeScript execution and REPL for node.js, with source map and native ESM support.
   - [nodemon](https://www.npmjs.com/package/nodemon) is a tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected.
-  - [npm-check-updates](https://www.npmjs.com/package/npm-check-updates): Upgrades your package.json dependencies to the latest versions, ignoring specified versions.
 
 ## App Setup in Dev Environment
 
@@ -128,6 +128,10 @@ In this section all the references used while building this application are list
   - [Optimistic mutation results](https://www.apollographql.com/docs/react/performance/optimistic-ui/)
 - Next.js:
   - [Bundling Environment Variables for the Browser](https://nextjs.org/docs/app/building-your-application/configuring/environment-variables#bundling-environment-variables-for-the-browser)
+  - [Using useEffect to run on the client only](https://nextjs.org/docs/messages/react-hydration-error#solution-1-using-useeffect-to-run-on-the-client-only)
+  - [The Perils of Hydration](https://www.joshwcomeau.com/react/the-perils-of-rehydration/)
+- React:
+  - [Persisting React State in localStorage](https://www.joshwcomeau.com/react/persisting-react-state-in-localstorage/)
 - Sounds:
   - [A React Hook for Sound Effects](https://www.joshwcomeau.com/react/announcing-use-sound-react-hook/)
   - [Come Here Notification](https://notificationsounds.com/notification-sounds/come-here-notification)
