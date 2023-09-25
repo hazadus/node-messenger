@@ -33,6 +33,8 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
     <Flex
       p={1}
       width="100%"
+      height="64px"
+      minHeight="64px"
       cursor="pointer"
       bg={isSelected ? "whiteAlpha.200" : "none"}
       position="relative"
@@ -43,7 +45,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
       <AvatarGroup
         size="md"
         max={3}
-        spacing="-30px"
+        spacing="-35px"
         pl={2}
       >
         {conversation.participants
@@ -63,7 +65,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
         position="relative"
       >
         <Text
-          maxWidth="310px"
+          maxWidth={{ base: "300px", lg: "250px" }}
           fontWeight={600}
           whiteSpace="nowrap"
           overflow="hidden"
@@ -72,7 +74,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           {formatUsernames(conversation.participants, signedInUserId)}
         </Text>
         <Text
-          maxWidth="310px"
+          maxWidth={{ base: "320px", lg: "280px" }}
           color="whiteAlpha.700"
           whiteSpace="nowrap"
           overflow="hidden"
@@ -96,6 +98,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
         </Text>
         {/* Conversation "context" menu */}
         <Flex
+          display={{ base: "none", lg: "flex" }}
           position="absolute"
           top="22px"
           right="5px"
