@@ -19,7 +19,7 @@ const FeedWrapper: React.FC<FeedWrapperProps> = ({ session }) => {
 
   return (
     <Flex
-      display={{ base: conversationId ? "flex" : "none", md: "flex" }}
+      display={{ base: conversationId ? "flex" : "none", lg: "flex" }}
       width="100%"
       direction="column"
     >

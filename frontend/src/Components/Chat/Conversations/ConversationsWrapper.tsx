@@ -162,9 +162,10 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
 
   return (
     <Flex
-      display={{ base: selectedConversationId ? "none" : "block", md: "block" }}
+      display={{ base: selectedConversationId ? "none" : "block", lg: "block" }}
       direction="column"
-      width={{ base: "100%", md: "600px" }}
+      width={{ base: "100%", lg: "410px" }}
+      minWidth={{ base: "100%", lg: "410px" }}
       height="100vh"
       overflow="hidden"
       bg="whiteAlpha.50"

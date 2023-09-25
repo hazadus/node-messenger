@@ -29,7 +29,7 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ conversationId, signedInUserId 
       borderColor="whiteAlpha.200"
     >
       <Button
-        display={{ md: "none" }}
+        display={{ lg: "none" }}
         ml={2}
         onClick={() =>
           router.replace("?conversationId", "/", {
