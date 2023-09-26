@@ -21,6 +21,7 @@ import { LuDelete, LuListFilter } from "react-icons/lu";
 // @ts-ignore
 import useSound from "use-sound";
 import { ConversationPopulated } from "../../../../../backend/src/types";
+import { createUmamiEvent } from "../../../helpers/helpers";
 import ConversationsList from "./ConversationsList";
 import ConversationsNavbar from "./ConversationsNavbar";
 
@@ -208,7 +209,10 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
           <Button
             bg="none"
             p={0}
-            onClick={() => setShowUnreadOnly(!showUnreadOnly)}
+            onClick={() => {
+              setShowUnreadOnly(!showUnreadOnly);
+              createUmamiEvent("Show unread chats only toggled", session.user.username);
+            }}
           >
             {showUnreadOnly ? <BsFilterCircleFill size={20} /> : <LuListFilter size={20} />}
           </Button>

@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { SendMessageArguments } from "../../../../../backend/src/types";
 import MessageOperations from "../../../graphql/operations/message";
+import { createUmamiEvent } from "../../../helpers/helpers";
 
 type MessageInputProps = {
   session: Session;
@@ -36,7 +37,9 @@ const MessageInput: React.FC<MessageInputProps> = ({ session, conversationId }) 
     }
 
     try {
-      // Call sendMessage mutation
+      /**
+       * Call sendMessage mutation
+       */
       const senderId = session.user.id;
       const messageId = new ObjectId().toString();
       const newMessage: SendMessageArguments = {
@@ -52,9 +55,12 @@ const MessageInput: React.FC<MessageInputProps> = ({ session, conversationId }) 
         },
       });
 
-      // On success, clear message body
+      /**
+       * On success, clear message body and create Umami event
+       */
       if (data?.sendMessage && !errors) {
         setMessageBody("");
+        createUmamiEvent("Message sent", session.user.username);
       }
     } catch (error: any) {
       console.log("onSendMessage error:", error);

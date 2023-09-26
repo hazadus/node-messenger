@@ -18,6 +18,7 @@ import { BsChatLeftDotsFill } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { GoMute, GoUnmute } from "react-icons/go";
 import { MdOutlineLogout } from "react-icons/md";
+import { createUmamiEvent } from "../../../helpers/helpers";
 import { useStickyState } from "../../../utils/utils";
 import AboutAppModal from "./Modal/AboutAppModal";
 import FindConversationModal from "./Modal/FindConversationModal";
@@ -35,13 +36,22 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
 
   const [isSoundEnabled, setIsSoundEnabled] = useStickyState("isSoundEnabled", true);
 
-  const onOpenFindConversationModal = () => setIsFindConversationModalOpen(true);
+  const onOpenFindConversationModal = () => {
+    setIsFindConversationModalOpen(true);
+    createUmamiEvent("Create Chat modal open", session.user.username);
+  };
   const onCloseFindConversationModal = () => setIsFindConversationModalOpen(false);
 
-  const onOpenUserProfileModal = () => setIsUserProfileModalOpen(true);
+  const onOpenUserProfileModal = () => {
+    setIsUserProfileModalOpen(true);
+    createUmamiEvent("User Profile modal open", session.user.username);
+  };
   const onCloseUserProfileModal = () => setIsUserProfileModalOpen(false);
 
-  const onOpenAboutAppModal = () => setIsAboutAppModalOpen(true);
+  const onOpenAboutAppModal = () => {
+    setIsAboutAppModalOpen(true);
+    createUmamiEvent("About App modal open", session.user.username);
+  };
   const onCloseAboutAppModal = () => setIsAboutAppModalOpen(false);
 
   useEffect(() => {
@@ -138,7 +148,10 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
                   fontWeight={700}
                   bg="#2D2D2D"
                   _hover={{ bg: "whiteAlpha.300" }}
-                  onClick={() => setIsSoundEnabled(!isSoundEnabled)}
+                  onClick={() => {
+                    setIsSoundEnabled(!isSoundEnabled);
+                    createUmamiEvent("Sound notifications toggled", session.user.username);
+                  }}
                 >
                   <Flex align="center">
                     <Icon
