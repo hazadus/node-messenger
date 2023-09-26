@@ -14,6 +14,11 @@ const ConversationFields = `
   latestMessage {
     ${MessageFields}
   }
+  createdByUser {
+    id
+    username
+    image
+  }
   updatedAt
 `;
 

@@ -280,6 +280,13 @@ export const conversationPopulatedInclude = Prisma.validator<Prisma.Conversation
       },
     },
   },
+  createdByUser: {
+    select: {
+      id: true,
+      username: true,
+      image: true,
+    },
+  },
 });
 
 export default resolvers;
