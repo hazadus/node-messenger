@@ -90,10 +90,13 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
           {data.messages.map((message, index) => {
             /**
              * We want to show date only when the date of current message is > than date of
-             * previous message, like in Telegram or WhatsApp web.
+             * previous message, like in Telegram or WhatsApp web, and at the very beginning of
+             * the conversation.
              */
-            let dateCaption = null;
+            let dateCaption: string | null = null;
+            let dateToFormat: Date | null = null;
             const prevIndex = index + 1;
+
             if (prevIndex < data.messages.length) {
               const prevMessage = data.messages[prevIndex];
               const currentMessageDate = new Date(message.createdAt).getDate();
@@ -101,16 +104,27 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
 
               if (currentMessageDate != previousMessageDate) {
                 /**
-                 * Apply relative date formatting.
+                 * Adjacent messages have different dates.
                  */
-                dateCaption = formatRelative(message.createdAt, new Date(), {
-                  locale: {
-                    ...enUS,
-                    formatRelative: (token) =>
-                      formatRelativeLocale[token as keyof typeof formatRelativeLocale],
-                  },
-                });
+                dateToFormat = message.createdAt;
               }
+            } else if (index === data.messages.length - 1) {
+              /**
+               * We're at the top of the messages list.
+               */
+              dateToFormat = message.createdAt;
+            }
+
+            if (dateToFormat) {
+              /**
+               * Apply relative date formatting.
+               */
+              dateCaption = formatRelative(dateToFormat, new Date(), {
+                locale: {
+                  ...enUS,
+                  formatRelative: (token) => formatRelativeLocale[token as keyof typeof formatRelativeLocale],
+                },
+              });
             }
 
             return (
