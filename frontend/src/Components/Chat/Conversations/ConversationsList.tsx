@@ -1,10 +1,10 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { formatUsernames } from "@/helpers/helpers";
+import { Flex, Text } from "@chakra-ui/react";
 import { Session } from "next-auth";
 import { useRouter } from "next/router";
 import React from "react";
 import { ConversationPopulated, ParticipantPopulated } from "../../../../../backend/src/types";
 import ConversationItem from "./ConversationItem";
-import { formatUsernames } from "@/helpers/helpers";
 
 type ConversationsListProps = {
   session: Session;
@@ -93,7 +93,7 @@ const ConversationsList: React.FC<ConversationsListProps> = ({
         direction="column"
         height="100%"
         overflowX="hidden"
-        overflowY="scroll"
+        overflowY="auto"
       >
         {filteredConversations.map((conversation) => {
           const { hasSeenLatestMessage } = getSignedInUserParticipantObject(conversation);

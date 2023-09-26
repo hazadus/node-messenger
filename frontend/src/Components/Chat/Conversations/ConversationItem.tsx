@@ -1,5 +1,5 @@
 import { formatUsernames } from "@/helpers/helpers";
-import { Avatar, AvatarGroup, Flex, Icon, Stack, Text } from "@chakra-ui/react";
+import { Avatar, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React from "react";
@@ -32,6 +32,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
   return (
     <Flex
       p={1}
+      align="center"
       width="100%"
       height="64px"
       minHeight="64px"
@@ -42,22 +43,12 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
       onClick={onClick}
     >
       {/* Conversation item itself */}
-      <AvatarGroup
-        size="md"
-        max={3}
-        spacing="-35px"
-        pl={2}
-      >
-        {conversation.participants
-          .filter((participant) => participant.user.id !== signedInUserId)
-          .map((participant) => (
-            <Avatar
-              key={`conv-list-item-avatar-id-${participant.user.id}`}
-              name={participant.user.username || ""}
-              src={participant.user.image || ""}
-            />
-          ))}
-      </AvatarGroup>
+      <Avatar
+        src={
+          conversation.participants.find((participant) => participant.user.id !== signedInUserId)?.user
+            .image || ""
+        }
+      />
       <Stack
         p={1}
         spacing={0}
@@ -71,10 +62,11 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           overflow="hidden"
           textOverflow="ellipsis"
         >
-          {formatUsernames(conversation.participants, signedInUserId)}
+          {formatUsernames(conversation.participants, signedInUserId)} very long username list
         </Text>
         <Text
           maxWidth={{ base: "320px", lg: "280px" }}
+          height="24px"
           color="whiteAlpha.700"
           whiteSpace="nowrap"
           overflow="hidden"
@@ -88,6 +80,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           textAlign="right"
           position="absolute"
           right="10px"
+          top="5px"
         >
           {formatRelative(conversation.updatedAt, new Date(), {
             locale: {
