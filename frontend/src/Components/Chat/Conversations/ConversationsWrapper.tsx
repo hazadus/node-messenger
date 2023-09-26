@@ -4,7 +4,6 @@ import { ConversationsData, ConversationUpdatedData } from "@/types";
 import { getIsSoundEnabled } from "@/utils/utils";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import {
-  Box,
   Button,
   Flex,
   Input,
@@ -65,15 +64,6 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
       }
 
       /**
-       * Play notification sound.
-       *
-       * TODO: check if there's actually new message in the conversation
-       * (latest message has changed). Because we do not want to play sounds
-       * when, for example, conversation was just marked as read.
-       */
-      if (getIsSoundEnabled()) playNotificationSound();
-
-      /**
        * If we received update on conversation which is currently open,
        * mark it as read (if it is not already).
        */
@@ -97,6 +87,15 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
           }
         }
       }
+
+      /**
+       * Play notification sound.
+       *
+       * Check if there's actually new message in the conversation
+       * (latest message is not read). Because we do not want to play sounds
+       * when, for example, conversation was just marked as read.
+       */
+      if (getIsSoundEnabled() && !isMarkedAsRead) playNotificationSound();
     },
   });
 
