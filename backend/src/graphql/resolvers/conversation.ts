@@ -64,6 +64,7 @@ const resolvers = {
   Mutation: {
     /**
      * Create conversation document in the database, including passed participants.
+     * Signed in user is set as conversation creator.
      * @param args participantIds: Array<string> - array of participant IDs
      * @returns `conversationId: string` – ID of the newly created conversation
      */
@@ -97,6 +98,7 @@ const resolvers = {
                 })),
               },
             },
+            createdByUserId: session.user.id!,
           },
           include: conversationPopulatedInclude,
         });

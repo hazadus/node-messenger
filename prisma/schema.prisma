@@ -40,15 +40,16 @@ model Session {
 
 model User {
   id  String  @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  username      String?   @unique
-  conversations ConversationParticipant[]
-  messages      Message[]
-  emailVerified DateTime? @map("email_verified")
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
+  name                  String?
+  email                 String?   @unique
+  username              String?   @unique
+  conversations         ConversationParticipant[]
+  conversationsCreated  Conversation[]
+  messages              Message[]
+  emailVerified         DateTime? @map("email_verified")
+  image                 String?
+  accounts              Account[]
+  sessions              Session[]
 
   @@map("users")
 }
@@ -69,6 +70,8 @@ model Conversation {
   latestMessageId String?    @db.ObjectId @unique
   latestMessage   Message?   @relation(name: "latestConversationMessage", fields: [latestMessageId], references: [id], onUpdate: NoAction, onDelete: NoAction)
   participants    ConversationParticipant[]
+  createdByUserId String     @db.ObjectId
+  createdByUser   User       @relation(fields: [createdByUserId], references: [id])
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
 }
