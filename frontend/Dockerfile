@@ -7,6 +7,10 @@ WORKDIR /app
 COPY ./backend/src ./backend/src
 COPY ./backend/package.json ./backend/package-lock.json*  ./backend/
 
+# Copy shared stuff
+COPY ./prisma/schema.prisma ./backend/prisma/schema.prisma
+COPY ./prisma/schema.prisma ./frontend/prisma/schema.prisma
+
 # Copy frontend stuff
 COPY ./frontend/package.json  ./frontend/
 COPY ./frontend/package-lock.json*  ./frontend/
@@ -23,7 +27,7 @@ COPY ./frontend/sentry.server.config.ts ./frontend/
 # Install backend dependencies
 WORKDIR /app/backend
 RUN npm ci
-RUN npx prisma generate --schema=src/prisma/schema.prisma
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 # Install frontend dependencies
 WORKDIR /app/frontend
@@ -40,7 +44,7 @@ ENV NEXT_PUBLIC_ENV_VARIABLE=${NEXT_PUBLIC_ENV_VARIABLE}
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Build Prisma client
-RUN npx prisma generate --schema=src/prisma/schema.prisma
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 # Build and start Next.js app
 RUN npm run build
