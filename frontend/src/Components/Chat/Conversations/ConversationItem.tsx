@@ -48,6 +48,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           conversation.participants.find((participant) => participant.user.id !== signedInUserId)?.user
             .image || ""
         }
+        ml="6px"
       />
       <Stack
         p={1}
@@ -62,7 +63,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           overflow="hidden"
           textOverflow="ellipsis"
         >
-          {formatUsernames(conversation.participants, signedInUserId)} very long username list
+          {formatUsernames(conversation.participants, signedInUserId)}
         </Text>
         <Text
           maxWidth={{ base: "320px", lg: "280px" }}
@@ -105,7 +106,7 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
         <Icon
           as={GoDotFill}
           position="absolute"
-          left="-1px"
+          left="-3px"
           top="24px"
           color="purple.300"
         />
