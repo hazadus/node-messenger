@@ -36,6 +36,7 @@ const typeDefs = gql`
     id: String
     latestMessage: Message
     participants: [Participant]
+    createdByUser: User
     createdAt: Date
     updatedAt: Date
   }

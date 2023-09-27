@@ -50,7 +50,7 @@ CLIENT_ORIGIN=http://localhost:3000
 DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
 ```
 
-Generate Prisma client: `npx prisma generate --schema=src/prisma/schema.prisma`.
+Generate Prisma client (from backend directory): `npx prisma generate --schema=../prisma/schema.prisma`.
 
 Then `npm run dev` to run the app using `nodemon`.
 
@@ -70,8 +70,8 @@ DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=tru
 Generate Prisma Client:
 
 ```bash
-# From app directory:
-npx prisma generate --schema=./frontend/src/prisma/schema.prisma
+# From frontend directory:
+npx prisma generate --schema=../prisma/schema.prisma
 ```
 
 Do `chmod +x ./frontend/docker/initiate_replica.sh`, then `docker compose up -d` to run our very own MongoDB Replica Set. Then `npm run dev` to run the app.

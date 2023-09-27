@@ -64,7 +64,16 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ conversationId, signedInUserId 
                   />
                 ))}
             </AvatarGroup>
-            <Text>{formatUsernames(conversation.participants, signedInUserId)}</Text>
+            <Flex direction="column">
+              <Text>{formatUsernames(conversation.participants, signedInUserId)}</Text>
+              <Text
+                fontSize="xs"
+                color="whiteAlpha.700"
+                display={{ base: "none", md: "flex" }}
+              >
+                Chat created by: {conversation.createdByUser.username}
+              </Text>
+            </Flex>
           </Flex>
 
           {/* Menu button and menu */}
