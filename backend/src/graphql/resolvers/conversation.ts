@@ -1,7 +1,12 @@
 import { Prisma } from "@prisma/client";
 import { GraphQLError } from "graphql";
 import { withFilter } from "graphql-subscriptions";
-import type { ConversationUpdatedSubscriptionPayload, GraphQLContext } from "../../types";
+import { userIsConversationParticipant } from "../../helpers";
+import type {
+  ConversationDeletedSubscriptionPayload,
+  ConversationUpdatedSubscriptionPayload,
+  GraphQLContext,
+} from "../../types";
 import { ConversationPopulated } from "../../types";
 
 const resolvers = {
@@ -181,6 +186,72 @@ const resolvers = {
         throw new GraphQLError(error?.message);
       }
     },
+    /**
+     * Delete conversation and all related entities.
+     */
+    deleteConversation: async (
+      _: any,
+      args: { conversationId: string },
+      context: GraphQLContext,
+    ): Promise<boolean> => {
+      const { session, prisma, pubsub } = context;
+      const { conversationId } = args;
+
+      // Check if user is authenticated.
+      if (!session?.user) {
+        const errorMessage = "User is not authenticated.";
+        console.log("❌ deleteConversation error:", errorMessage);
+        throw new GraphQLError(errorMessage);
+      }
+
+      // Get conversation document, check if it was created by signed in user.
+      const conversation = await prisma.conversation.findUnique({
+        where: {
+          id: conversationId,
+        },
+        include: conversationPopulatedInclude,
+      });
+
+      if (conversation?.createdByUser.id !== session.user?.id) {
+        const errorMessage = "Users are not allowed to delete conversations created by other users.";
+        console.log("❌ deleteConversation error:", errorMessage);
+        throw new GraphQLError(errorMessage);
+      }
+
+      // Use transaction to delete conversation, it's participants and all messages.
+      try {
+        const [deletedConversation] = await prisma.$transaction([
+          prisma.conversation.delete({
+            where: {
+              id: conversationId,
+            },
+            include: conversationPopulatedInclude,
+          }),
+          prisma.conversationParticipant.deleteMany({
+            where: {
+              conversationId,
+            },
+          }),
+          prisma.message.deleteMany({
+            where: {
+              conversationId,
+            },
+          }),
+        ]);
+
+        // On success, emit events to update subscription
+        pubsub.publish("CONVERSATION_DELETED", {
+          conversationDeleted: { deletedConversation: deletedConversation },
+        });
+
+        console.log("✅ Conversation successfully deleted.");
+      } catch (error: any) {
+        console.log("❌ deleteConversation error:", error);
+        throw new GraphQLError(error?.message);
+      }
+
+      return true;
+    },
   },
   Subscription: {
     /**
@@ -245,6 +316,33 @@ const resolvers = {
 
           const signedInUserIsParticipant = !!participants.find((p) => p.userId === session?.user?.id);
           return signedInUserIsParticipant;
+        },
+      ),
+    },
+    /**
+     * Send `CONVERSATION_DELETED` event only to participants of the deleted conversation.
+     */
+    conversationDeleted: {
+      subscribe: withFilter(
+        (_: any, __: any, context: GraphQLContext) => {
+          const { pubsub } = context;
+          console.log("💡 conversationDeleted subscription resolver");
+          return pubsub.asyncIterator(["CONVERSATION_DELETED"]);
+        },
+        (payload: ConversationDeletedSubscriptionPayload, _: any, context: GraphQLContext) => {
+          const { session } = context;
+
+          // Check if user is authenticated.
+          if (!session?.user) {
+            const errorMessage = "User is not authenticated.";
+            console.log("conversationDeleted subscription resolver - filter callback:", errorMessage);
+            throw new GraphQLError(errorMessage);
+          }
+
+          // Check if signed in user participates in the conversation.
+          const signedInUserId = session.user.id!;
+          const participants = payload.conversationDeleted.deletedConversation.participants;
+          return userIsConversationParticipant(participants, signedInUserId);
         },
       ),
     },

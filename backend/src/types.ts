@@ -60,6 +60,12 @@ export type ConversationUpdatedSubscriptionPayload = {
   };
 };
 
+export type ConversationDeletedSubscriptionPayload = {
+  conversationDeleted: {
+    deletedConversation: ConversationPopulated;
+  };
+};
+
 /**
  * Messages
  */
