@@ -6,6 +6,17 @@ Check out the current version deployed at http://messenger.hazadus.ru. Drop me a
 
 Thanks to [Shadee Merhi](https://github.com/shadeemerhi) for his amazing [video tutorial](https://www.youtube.com/watch?v=mj_Qe2jBYS4), which was used as the base for this project.
 
+## Additional Features
+
+- 🐳 Docker Compose for easy deploy on Linux VDS.
+- 🔭 Sentry and Umami installed for observability.
+- 🛎️ Sound notifications on new messages.
+- 👨‍💻 User image from Google account used as avatars.
+- ⚙️ Some changes in app logic:
+  - Only user who created the conversation can delete it.
+- Lots of improvements in UI.
+- ⚡️ More stuff to come, see Issues for upcoming features!
+
 ## Frameworks and libraries used
 
 - Frontend
@@ -18,7 +29,7 @@ Thanks to [Shadee Merhi](https://github.com/shadeemerhi) for his amazing [video 
   - [react-icons](https://react-icons.github.io/react-icons/): Include popular icons in your React projects easily with react-icons, which utilizes ES6 imports that allows you to include only the icons that your project is using.
   - [date-fns](https://www.npmjs.com/package/date-fns): date-fns provides the most comprehensive, yet simple and consistent toolset for manipulating JavaScript dates in a browser & Node.js.
   - [bson](https://www.npmjs.com/package/bson): BSON is short for "Binary JSON," and is the binary-encoded serialization of JSON-like documents. Used to generate IDs for MongoDB documents.
-  - [npm-check-updates](https://www.npmjs.com/package/npm-check-updates): Upgrades your package.json dependencies to the latest versions, ignoring specified versions.
+  - [use-sound](https://www.npmjs.com/package/use-sound): A React Hook for Sound Effects.
 - Backend
   - [Apollo Server v4](https://www.apollographql.com/docs/apollo-server/)
   - [@graphql-tools/schema](https://www.npmjs.com/package/@graphql-tools/schema)
@@ -27,7 +38,6 @@ Thanks to [Shadee Merhi](https://github.com/shadeemerhi) for his amazing [video 
   - [Prisma](https://www.prisma.io/docs/getting-started/quickstart)
   - [lodash.merge](https://www.npmjs.com/package/lodash.merge)
   - [dotenv](https://www.npmjs.com/package/dotenv): Dotenv is a zero-dependency module that loads environment variables from a `.env` file into `process.env`.
-  - [use-sound](https://www.npmjs.com/package/use-sound): A React Hook for Sound Effects.
 - Tools
   - VSCode Extensions
     - GraphQL: Syntax Highlighting (by GraphQL Foundation)
@@ -35,6 +45,7 @@ Thanks to [Shadee Merhi](https://github.com/shadeemerhi) for his amazing [video 
   - [typescript](https://www.npmjs.com/package/typescript): TypeScript is a language for application-scale JavaScript. TypeScript adds optional types to JavaScript that support tools for large-scale JavaScript applications for any browser, for any host, on any OS.
   - [ts-node](https://www.npmjs.com/package/ts-node): TypeScript execution and REPL for node.js, with source map and native ESM support.
   - [nodemon](https://www.npmjs.com/package/nodemon) is a tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected.
+  - [npm-check-updates](https://www.npmjs.com/package/npm-check-updates): Upgrades your package.json dependencies to the latest versions, ignoring specified versions.
 
 ## App Setup in Dev Environment
 
@@ -50,7 +61,7 @@ CLIENT_ORIGIN=http://localhost:3000
 DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
 ```
 
-Generate Prisma client (from backend directory): `npx prisma generate --schema=../prisma/schema.prisma`.
+Generate Prisma client (from **backend** directory): `make prisma_generate`.
 
 Then `npm run dev` to run the app using `nodemon`.
 
@@ -67,12 +78,7 @@ GOOGLE_CLIENT_SECRET=<Get it in the Google Cloud Console>
 DATABASE_URL="mongodb://localhost:30001/messenger?replicaSet=rs0&retryWrites=true&w=majority&directConnection=true"
 ```
 
-Generate Prisma Client:
-
-```bash
-# From frontend directory:
-npx prisma generate --schema=../prisma/schema.prisma
-```
+Generate Prisma client (from **frontend** directory): `make prisma_generate`.
 
 Do `chmod +x ./frontend/docker/initiate_replica.sh`, then `docker compose up -d` to run our very own MongoDB Replica Set. Then `npm run dev` to run the app.
 

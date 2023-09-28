@@ -22,6 +22,13 @@ const typeDefs = gql`
     markConversationAsRead(conversationId: String!, userId: String!): Boolean
   }
 
+  type Mutation {
+    """
+    Delete conversation and all related entities.
+    """
+    deleteConversation(conversationId: String!): Boolean
+  }
+
   type Query {
     """
     Get all conversations of the signed in user.
@@ -63,6 +70,17 @@ const typeDefs = gql`
 
   type ConversationUpdatedSubscriptionPayload {
     conversation: Conversation
+  }
+
+  type Subscription {
+    """
+    Fires off when a conversation is deleted.
+    """
+    conversationDeleted: ConversationDeletedSubscriptionPayload
+  }
+
+  type ConversationDeletedSubscriptionPayload {
+    deletedConversation: Conversation
   }
 `;
 

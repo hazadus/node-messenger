@@ -1,6 +1,6 @@
 import SkeletonLoader from "@/Components/SkeletonLoader";
 import ConversationOperations from "@/graphql/operations/conversation";
-import { ConversationsData, ConversationUpdatedData } from "@/types";
+import { ConversationDeletedData, ConversationUpdatedData, ConversationsData } from "@/types";
 import { getIsSoundEnabled } from "@/utils/utils";
 import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import {
@@ -97,6 +97,52 @@ const ConversationsWrapper: React.FC<ConversationsWrapperProps> = ({ session }) 
        * when, for example, conversation was just marked as read.
        */
       if (getIsSoundEnabled() && !isMarkedAsRead) playNotificationSound();
+    },
+  });
+
+  /**
+   * Subscribe to conversation deletions.
+   */
+  useSubscription<ConversationDeletedData>(ConversationOperations.Subscriptions.conversationDeleted, {
+    onData: ({ client, data }) => {
+      const { data: subscriptionData } = data;
+
+      if (!subscriptionData) {
+        return;
+      }
+
+      /**
+       * Grab existing conversations from the Apollo cache
+       */
+      const existingConversationsData = client.readQuery<ConversationsData>({
+        query: ConversationOperations.Queries.conversations,
+      });
+
+      if (!existingConversationsData) {
+        return;
+      }
+
+      const { conversations: existingConversations } = existingConversationsData;
+      const deletedConversationId = subscriptionData.conversationDeleted.deletedConversation.id;
+
+      /**
+       * Update cache removing deleted conversation.
+       */
+      client.writeQuery<ConversationsData>({
+        query: ConversationOperations.Queries.conversations,
+        data: {
+          conversations: existingConversations.filter(
+            (conversation) => conversation.id !== deletedConversationId,
+          ),
+        },
+      });
+
+      /**
+       * Push user away from the deleted conversation
+       */
+      if (deletedConversationId === selectedConversationId) {
+        router.push("/");
+      }
     },
   });
 

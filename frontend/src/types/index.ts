@@ -64,6 +64,13 @@ export type ConversationUpdatedData = {
   };
 };
 
+// Used in `conversationDeleted` subscription
+export type ConversationDeletedData = {
+  conversationDeleted: {
+    deletedConversation: ConversationPopulated;
+  };
+};
+
 /**
  * MESSAGES
  */
