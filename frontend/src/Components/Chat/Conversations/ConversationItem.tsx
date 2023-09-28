@@ -98,7 +98,10 @@ const ConversationItem: React.FC<ConversationItemProps> = ({
           right="5px"
           onClick={(event) => event.preventDefault()}
         >
-          <ConversationMenu iconType="chevron" />
+          <ConversationMenu
+            iconType="chevron"
+            conversation={conversation}
+          />
         </Flex>
       </Stack>
       {/* Unread messages indicator */}
