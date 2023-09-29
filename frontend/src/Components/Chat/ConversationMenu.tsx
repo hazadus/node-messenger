@@ -1,22 +1,54 @@
+import ConversationOperations from "@/graphql/operations/conversation";
+import { createUmamiEvent } from "@/helpers/helpers";
+import { useMutation } from "@apollo/client";
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import React from "react";
+import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
-import { BiDotsVertical } from "react-icons/bi";
+import { BiChevronDown, BiDotsVertical } from "react-icons/bi";
 import { FiEdit } from "react-icons/fi";
 import { IoExitOutline } from "react-icons/io5";
-import { BiChevronDown } from "react-icons/bi";
+import { ConversationPopulated } from "../../../../backend/src/types";
 
 type ConversationMenuProps = {
   iconType: "dots" | "chevron";
+  conversation: ConversationPopulated;
 };
 
-const ConversationMenu: React.FC<ConversationMenuProps> = ({ iconType }) => {
+const ConversationMenu: React.FC<ConversationMenuProps> = ({ iconType, conversation }) => {
+  const [deleteConversation] = useMutation<{ deleteConversation: boolean }, { conversationId: string }>(
+    ConversationOperations.Mutations.deleteConversation,
+  );
+  const { data: session } = useSession();
+  const signedInUserId = session?.user.id;
+
+  /**
+   * Delete conversation and redirect user to "/" on success.
+   */
+  const onDeleteConversation = async () => {
+    createUmamiEvent("Delete chat", session?.user.username || "");
+
+    try {
+      /**
+       * Redirect user to "/" on success.
+       */
+      await deleteConversation({
+        variables: {
+          conversationId: conversation.id,
+        },
+        update: () => {
+          toast.success("Chat deleted.");
+        },
+      });
+    } catch (error: any) {
+      console.log("onDeleteConversation error:", error);
+      toast.error(`Failed to delete chat! ${error}`);
+    }
+  };
+
   return (
-    <Menu
-      // isOpen={isOpen}
-      // onClose={onClose}
-      isLazy
-    >
+    <Menu isLazy>
       <MenuButton
         cursor="pointer"
         padding="4px 6px"
@@ -54,7 +86,8 @@ const ConversationMenu: React.FC<ConversationMenuProps> = ({ iconType }) => {
           icon={<AiOutlineDelete fontSize={19} />}
           bg="#2D2D2D"
           _hover={{ bg: "whiteAlpha.300" }}
-          isDisabled
+          isDisabled={conversation.createdByUser.id !== signedInUserId}
+          onClick={onDeleteConversation}
         >
           Delete
         </MenuItem>

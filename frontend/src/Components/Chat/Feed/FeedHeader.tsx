@@ -77,7 +77,10 @@ const FeedHeader: React.FC<FeedHeaderProps> = ({ conversationId, signedInUserId 
           </Flex>
 
           {/* Menu button and menu */}
-          <ConversationMenu iconType="dots" />
+          <ConversationMenu
+            iconType="dots"
+            conversation={conversation}
+          />
         </Flex>
       )}
     </Flex>
