@@ -1,9 +1,12 @@
+import MessageOperations from "@/graphql/operations/message";
+import { useMutation } from "@apollo/client";
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import React from "react";
+import toast from "react-hot-toast";
 import { AiOutlineDelete } from "react-icons/ai";
 import { BiChevronDown } from "react-icons/bi";
+import { BsPin, BsReply } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
-import { BsReply, BsPin } from "react-icons/bs";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { TiArrowForwardOutline } from "react-icons/ti";
 import { MessagePopulated } from "../../../../../../backend/src/types";
@@ -14,6 +17,26 @@ type MessageItemMenuProps = {
 };
 
 const MessageItemMenu: React.FC<MessageItemMenuProps> = ({ message, isSentBySignedInUser }) => {
+  const [deleteMessage] = useMutation<{ deleteMessage: boolean }, { messageId: string }>(
+    MessageOperations.Mutation.deleteMessage,
+  );
+
+  const onDeleteMessage = async () => {
+    try {
+      await deleteMessage({
+        variables: {
+          messageId: message.id,
+        },
+        update: () => {
+          toast.success("Message deleted.");
+        },
+      });
+    } catch (error: any) {
+      console.log("onDeleteMessage error:", error);
+      toast.error(`Failed to delete message! ${error}`);
+    }
+  };
+
   return (
     <Menu isLazy>
       <MenuButton
@@ -75,7 +98,7 @@ const MessageItemMenu: React.FC<MessageItemMenuProps> = ({ message, isSentBySign
           bg="#2D2D2D"
           color="red.500"
           _hover={{ bg: "whiteAlpha.300" }}
-          onClick={() => {}}
+          onClick={onDeleteMessage}
           isDisabled={!isSentBySignedInUser}
         >
           Delete
