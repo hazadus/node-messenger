@@ -48,6 +48,19 @@ const typeDefs = gql`
       conversationId: String
     ): Message
   }
+
+  type Subscription {
+    """
+    Sent when a message was deleted.
+    """
+    messageDeleted(
+      """
+      conversationId (from where the message is) let us know to which conversation's
+      participants we want to emit this event.
+      """
+      conversationId: String
+    ): Message
+  }
 `;
 
 export default typeDefs;

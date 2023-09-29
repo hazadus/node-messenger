@@ -86,4 +86,8 @@ export type MessageSentSubscriptionPayload = {
   messageSent: MessagePopulated;
 };
 
+export type MessageDeletedSubscriptionPayload = {
+  messageDeleted: MessagePopulated;
+};
+
 export type MessagePopulated = Prisma.MessageGetPayload<{ include: typeof messagePopulatedInclude }>;

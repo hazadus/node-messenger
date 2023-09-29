@@ -5,6 +5,7 @@ import { userIsConversationParticipant } from "../../helpers";
 import {
   DeleteMessageArguments,
   GraphQLContext,
+  MessageDeletedSubscriptionPayload,
   MessagePopulated,
   MessageSentSubscriptionPayload,
   SendMessageArguments,
@@ -289,7 +290,7 @@ const resolvers = {
         /**
          * Notify clients - message deleted.
          */
-        // TODO
+        pubsub.publish("MESSAGE_DELETED", { messageDeleted: deletedMessage });
       } catch (error: any) {
         console.log("❌ deleteMessage error:", error);
         throw new GraphQLError(`Error deleting message! ${error}`);
@@ -318,6 +319,32 @@ const resolvers = {
           // Send events only to participants of the conversation where
           // the message was sent to.
           return payload.messageSent.conversationId === args.conversationId;
+        },
+      ),
+    },
+    /**
+     * Sent when a message was deleted.
+     */
+    messageDeleted: {
+      subscribe: withFilter(
+        // The first parameter is exactly the function you would use
+        // for subscribe if you weren't applying a filter.
+        (_: any, __: any, context: GraphQLContext) => {
+          const { pubsub } = context;
+          console.log("💡 messageDeleted resolver");
+          return pubsub.asyncIterator(["MESSAGE_DELETED"]);
+        },
+        // Filter function.
+        // `conversationId` (from where message was deleted) arg comes
+        // from the `messageSent` subscription definintion in GraphQL schema.
+        (
+          payload: MessageDeletedSubscriptionPayload,
+          args: { conversationId: string },
+          context: GraphQLContext,
+        ) => {
+          // Send events only to participants of the conversation from where
+          // the message was deleted.
+          return payload.messageDeleted.conversationId === args.conversationId;
         },
       ),
     },
