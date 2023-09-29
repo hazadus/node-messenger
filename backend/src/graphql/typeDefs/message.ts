@@ -28,6 +28,14 @@ const typeDefs = gql`
     sendMessage(id: String, conversationId: String, senderId: String, body: String): Boolean
   }
 
+  type Mutation {
+    """
+    Delete message document from the database. Update conversation, if it was the
+    latest message in the conversation. Notify clients.
+    """
+    deleteMessage(messageId: String!): Boolean
+  }
+
   type Subscription {
     """
     Sent every time new message created.

@@ -78,6 +78,10 @@ export type SendMessageArguments = {
   body: string;
 };
 
+export type DeleteMessageArguments = {
+  messageId: string;
+};
+
 export type MessageSentSubscriptionPayload = {
   messageSent: MessagePopulated;
 };
