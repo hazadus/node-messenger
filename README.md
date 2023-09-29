@@ -14,6 +14,7 @@ Thanks to [Shadee Merhi](https://github.com/shadeemerhi) for his amazing [video 
 - 👨‍💻 User image from Google account used as avatars.
 - ⚙️ Some changes in app logic:
   - Only user who created the conversation can delete it.
+- Users can delete their messages from chats.
 - Lots of improvements in UI.
 - ⚡️ More stuff to come, see Issues for upcoming features!
 

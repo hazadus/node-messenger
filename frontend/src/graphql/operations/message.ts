@@ -27,11 +27,23 @@ export default {
         sendMessage(id: $id, conversationId: $conversationId, senderId: $senderId, body: $body)
       }
     `,
+    deleteMessage: gql`
+      mutation DeleteMessage($messageId: String!) {
+        deleteMessage(messageId: $messageId)
+      }
+    `,
   },
   Subscription: {
     messageSent: gql`
       subscription MessageSent($conversationId: String!) {
         messageSent(conversationId: $conversationId) {
+          ${MessageFields}
+        }
+      }
+    `,
+    messageDeleted: gql`
+      subscription MessageDeleted($conversationId: String!) {
+        messageDeleted(conversationId: $conversationId) {
           ${MessageFields}
         }
       }

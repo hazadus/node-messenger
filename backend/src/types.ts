@@ -78,8 +78,16 @@ export type SendMessageArguments = {
   body: string;
 };
 
+export type DeleteMessageArguments = {
+  messageId: string;
+};
+
 export type MessageSentSubscriptionPayload = {
   messageSent: MessagePopulated;
+};
+
+export type MessageDeletedSubscriptionPayload = {
+  messageDeleted: MessagePopulated;
 };
 
 export type MessagePopulated = Prisma.MessageGetPayload<{ include: typeof messagePopulatedInclude }>;
