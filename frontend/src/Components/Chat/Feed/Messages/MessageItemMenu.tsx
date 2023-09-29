@@ -10,6 +10,7 @@ import { FiEdit } from "react-icons/fi";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { TiArrowForwardOutline } from "react-icons/ti";
 import { MessagePopulated } from "../../../../../../backend/src/types";
+import { createUmamiEvent } from "@/helpers/helpers";
 
 type MessageItemMenuProps = {
   message: MessagePopulated;
@@ -22,6 +23,8 @@ const MessageItemMenu: React.FC<MessageItemMenuProps> = ({ message, isSentBySign
   );
 
   const onDeleteMessage = async () => {
+    createUmamiEvent("Delete message", message.sender.username || "");
+
     try {
       await deleteMessage({
         variables: {

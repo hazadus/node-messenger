@@ -41,5 +41,12 @@ export default {
         }
       }
     `,
+    messageDeleted: gql`
+      subscription MessageDeleted($conversationId: String!) {
+        messageDeleted(conversationId: $conversationId) {
+          ${MessageFields}
+        }
+      }
+    `,
   },
 };

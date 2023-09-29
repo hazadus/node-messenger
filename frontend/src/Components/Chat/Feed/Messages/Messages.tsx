@@ -1,13 +1,13 @@
 import SkeletonLoader from "@/Components/SkeletonLoader";
-import MessageOperation from "@/graphql/operations/message";
+import MessageOperations from "@/graphql/operations/message";
 import { MessagesData, MessagesVariables } from "@/types";
-import { ApolloError, useQuery } from "@apollo/client";
+import { ApolloError, useQuery, useSubscription } from "@apollo/client";
 import { Flex, Stack, Text } from "@chakra-ui/react";
 import { formatRelative } from "date-fns";
 import enUS from "date-fns/locale/en-US";
 import React, { useEffect } from "react";
 import toast from "react-hot-toast";
-import MessageOperations from "../../../../graphql/operations/message";
+import { MessagePopulated } from "../../../../../../backend/src/types";
 import { MessageSubscriptionData } from "../../../../types";
 import MessageItem from "./MessageItem";
 
@@ -25,7 +25,7 @@ type MessagesProps = {
 
 const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
   const { data, loading, error, subscribeToMore, refetch } = useQuery<MessagesData, MessagesVariables>(
-    MessageOperation.Query.messages,
+    MessageOperations.Query.messages,
     {
       variables: {
         conversationId,
@@ -35,6 +35,54 @@ const Messages: React.FC<MessagesProps> = ({ userId, conversationId }) => {
         toast.error(error.message);
       },
       onCompleted: () => {},
+    },
+  );
+
+  /**
+   * Subscribe to message deletions.
+   */
+  useSubscription<{ messageDeleted: MessagePopulated }, { conversationId: string }>(
+    MessageOperations.Subscription.messageDeleted,
+    {
+      variables: {
+        conversationId,
+      },
+      onData: ({ client, data }) => {
+        const { data: subscriptionData } = data;
+
+        if (!subscriptionData) {
+          return;
+        }
+
+        /**
+         * Grab existing messages in the conversation from the Apollo cache
+         */
+        const existingMessagesData = client.readQuery<MessagesData>({
+          query: MessageOperations.Query.messages,
+          variables: {
+            conversationId,
+          },
+        });
+
+        if (!existingMessagesData) {
+          return;
+        }
+
+        /**
+         * Update cache removing deleted message.
+         */
+        const { messages: existingMessages } = existingMessagesData;
+        const deletedMessageId = subscriptionData.messageDeleted.id;
+        client.writeQuery<MessagesData>({
+          query: MessageOperations.Query.messages,
+          variables: {
+            conversationId,
+          },
+          data: {
+            messages: existingMessages.filter((message) => message.id !== deletedMessageId),
+          },
+        });
+      },
     },
   );
 
