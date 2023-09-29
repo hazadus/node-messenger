@@ -2,6 +2,7 @@ import { Avatar, Flex, Stack, Text, Tooltip } from "@chakra-ui/react";
 import { format } from "date-fns";
 import React from "react";
 import { MessagePopulated } from "../../../../../../backend/src/types";
+import MessageItemMenu from "./MessageItemMenu";
 
 type MessageItemProps = {
   message: MessagePopulated;
@@ -51,10 +52,15 @@ const MessageItem: React.FC<MessageItemProps> = ({ message, isSentBySignedInUser
               <Text
                 fontSize="11px"
                 color="whiteAlpha.700"
+                py={1}
               >
                 {format(message.createdAt, "HH:mm")}
               </Text>
             </Tooltip>
+            <MessageItemMenu
+              message={message}
+              isSentBySignedInUser={isSentBySignedInUser}
+            />
           </Flex>
         </Stack>
       </Stack>

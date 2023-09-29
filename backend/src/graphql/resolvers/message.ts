@@ -1,13 +1,15 @@
 import { Prisma } from "@prisma/client";
 import { GraphQLError } from "graphql";
 import { withFilter } from "graphql-subscriptions";
+import { userIsConversationParticipant } from "../../helpers";
 import {
+  DeleteMessageArguments,
   GraphQLContext,
+  MessageDeletedSubscriptionPayload,
   MessagePopulated,
   MessageSentSubscriptionPayload,
   SendMessageArguments,
 } from "../../types";
-import { userIsConversationParticipant } from "../../helpers";
 import { conversationPopulatedInclude } from "./conversation";
 
 const resolvers = {
@@ -191,6 +193,111 @@ const resolvers = {
 
       return true;
     },
+    /**
+     * Delete message document from the database. Update conversation, if it was the
+     * latest message in the conversation. Notify clients.
+     */
+    deleteMessage: async (
+      _: any,
+      args: DeleteMessageArguments,
+      context: GraphQLContext,
+    ): Promise<boolean> => {
+      const { session, prisma, pubsub } = context;
+
+      if (!session?.user) {
+        const errorMessage = "User not authenticated.";
+        console.log("deleteMessage error:", errorMessage);
+        throw new GraphQLError(errorMessage);
+      }
+
+      /**
+       * Get message document from the database.
+       */
+      const { messageId } = args;
+      const message = await prisma.message.findUnique({
+        where: {
+          id: messageId,
+        },
+        include: messagePopulatedInclude,
+      });
+
+      if (!message) {
+        const errorMessage = `Message "${messageId}" not found.`;
+        console.log("deleteMessage error:", errorMessage);
+        throw new GraphQLError(errorMessage);
+      }
+
+      /**
+       * Check if the message was sent by signed in user.
+       */
+      const signedInUserId = session.user.id;
+      if (message.sender.id !== signedInUserId) {
+        const errorMessage = "Users are not allowed to delete messages sent by other users.";
+        console.log("deleteMessage error:", errorMessage);
+        throw new GraphQLError(errorMessage);
+      }
+
+      try {
+        /**
+         * Delete message document from the database.
+         */
+        const deletedMessage = await prisma.message.delete({
+          where: {
+            id: messageId,
+          },
+          include: messagePopulatedInclude,
+        });
+
+        /**
+         * Update conversation, if it was the latest message in the conversation.
+         * Set new `latestMessage`.
+         * Notify clients.
+         */
+        const latestInConversation = await prisma.conversation.findFirst({
+          where: {
+            latestMessageId: messageId,
+          },
+          include: conversationPopulatedInclude,
+        });
+
+        if (latestInConversation) {
+          const newLatestMessage = await prisma.message.findFirst({
+            where: {
+              conversationId: latestInConversation.id,
+            },
+            orderBy: {
+              createdAt: "desc",
+            },
+          });
+
+          if (newLatestMessage) {
+            const updatedConversation = await prisma.conversation.update({
+              where: {
+                id: latestInConversation.id,
+              },
+              data: {
+                latestMessageId: newLatestMessage.id,
+              },
+              include: conversationPopulatedInclude,
+            });
+
+            pubsub.publish("CONVERSATION_UPDATED", {
+              conversationUpdated: { conversation: updatedConversation },
+            });
+          }
+        }
+
+        /**
+         * Notify clients - message deleted.
+         */
+        pubsub.publish("MESSAGE_DELETED", { messageDeleted: deletedMessage });
+      } catch (error: any) {
+        console.log("❌ deleteMessage error:", error);
+        throw new GraphQLError(`Error deleting message! ${error}`);
+      }
+
+      return true;
+    },
   },
   Subscription: {
     messageSent: {
@@ -212,6 +319,32 @@ const resolvers = {
           // Send events only to participants of the conversation where
           // the message was sent to.
           return payload.messageSent.conversationId === args.conversationId;
+        },
+      ),
+    },
+    /**
+     * Sent when a message was deleted.
+     */
+    messageDeleted: {
+      subscribe: withFilter(
+        // The first parameter is exactly the function you would use
+        // for subscribe if you weren't applying a filter.
+        (_: any, __: any, context: GraphQLContext) => {
+          const { pubsub } = context;
+          console.log("💡 messageDeleted resolver");
+          return pubsub.asyncIterator(["MESSAGE_DELETED"]);
+        },
+        // Filter function.
+        // `conversationId` (from where message was deleted) arg comes
+        // from the `messageSent` subscription definintion in GraphQL schema.
+        (
+          payload: MessageDeletedSubscriptionPayload,
+          args: { conversationId: string },
+          context: GraphQLContext,
+        ) => {
+          // Send events only to participants of the conversation from where
+          // the message was deleted.
+          return payload.messageDeleted.conversationId === args.conversationId;
         },
       ),
     },
