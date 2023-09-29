@@ -1,4 +1,9 @@
-FROM node:18-alpine AS base
+FROM node:18-slim AS base
+
+# These libs are needed by:
+# - openssl libssl-dev: `npx prisma generate`
+# - ca-certificates: Sentry CLI tools
+RUN apt-get update && apt-get install -y openssl libssl-dev ca-certificates
 
 WORKDIR /app
 
@@ -47,5 +52,6 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN npx prisma generate --schema=./prisma/schema.prisma
 
 # Build and start Next.js app
+ENV SENTRY_LOG_LEVEL=debug
 RUN npm run build
 CMD ["npm", "run", "start"]

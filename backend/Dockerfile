@@ -1,4 +1,7 @@
-FROM node:18-alpine AS base
+FROM node:18-slim AS base
+
+# These libs are needed by `npx prisma generate` to work properly
+RUN apt-get update && apt-get install -y openssl libssl-dev
 
 WORKDIR /app
 
