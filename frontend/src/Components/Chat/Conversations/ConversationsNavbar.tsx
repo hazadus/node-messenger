@@ -203,7 +203,10 @@ const ConversationsNavbar: React.FC<ConversationsNavbarProps> = ({ session }) =>
                 fontWeight={700}
                 bg="#2D2D2D"
                 _hover={{ bg: "whiteAlpha.300" }}
-                onClick={() => signOut()}
+                onClick={() => {
+                  createUmamiEvent("Sign Out", session.user.username);
+                  signOut();
+                }}
               >
                 <Flex align="center">
                   <Icon

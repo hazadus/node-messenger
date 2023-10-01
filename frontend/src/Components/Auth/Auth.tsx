@@ -1,4 +1,5 @@
 import UserOperations from "@/graphql/operations/user";
+import { createUmamiEvent } from "@/helpers/helpers";
 import type { CreateUsernameData, CreateUsernameVariables } from "@/types";
 import { useMutation } from "@apollo/client";
 import { Button, Center, Image, Input, Stack, Text } from "@chakra-ui/react";
@@ -90,7 +91,10 @@ const Auth: React.FC<AuthProps> = ({ session, reloadSession }) => {
                   height="20px"
                 />
               }
-              onClick={() => signIn("google")}
+              onClick={() => {
+                createUmamiEvent("Sign In with Google", "");
+                signIn("google");
+              }}
             >
               Continue with Google
             </Button>

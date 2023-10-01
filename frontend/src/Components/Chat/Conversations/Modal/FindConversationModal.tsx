@@ -25,6 +25,7 @@ import ConversationOperations from "../../../../graphql/operations/conversation"
 import UserOperations from "../../../../graphql/operations/user";
 import Participants from "./Participants";
 import SearchResultsList from "./SearchResultsList";
+import { createUmamiEvent } from "@/helpers/helpers";
 
 type FindConversationModalProps = {
   isOpen: boolean;
@@ -76,6 +77,7 @@ const FindConversationModal: React.FC<FindConversationModalProps> = ({ isOpen, o
        * On success, push user to the newly created conversation,
        * reset modal state and close it.
        */
+      createUmamiEvent("New Chat created", session.user.username);
       router.push({ query: { conversationId } });
       setParticipants([]);
       setUsername("");
