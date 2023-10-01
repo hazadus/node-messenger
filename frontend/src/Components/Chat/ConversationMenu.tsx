@@ -85,6 +85,7 @@ const ConversationMenu: React.FC<ConversationMenuProps> = ({ iconType, conversat
         <MenuItem
           icon={<AiOutlineDelete fontSize={19} />}
           bg="#2D2D2D"
+          color="red.500"
           _hover={{ bg: "whiteAlpha.300" }}
           isDisabled={conversation.createdByUser.id !== signedInUserId}
           onClick={onDeleteConversation}
