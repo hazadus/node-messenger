@@ -16,7 +16,7 @@ const theme = extendTheme(
     styles: {
       global: () => ({
         body: {
-          bg: "whiteAlpha.200",
+          bg: "whiteAlpha.200", // use "black" with Polypane
         },
       }),
     },

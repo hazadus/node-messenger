@@ -1,4 +1,5 @@
 import MessageOperations from "@/graphql/operations/message";
+import { createUmamiEvent } from "@/helpers/helpers";
 import { useMutation } from "@apollo/client";
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import React from "react";
@@ -10,7 +11,6 @@ import { FiEdit } from "react-icons/fi";
 import { MdOutlineContentCopy } from "react-icons/md";
 import { TiArrowForwardOutline } from "react-icons/ti";
 import { MessagePopulated } from "../../../../../../backend/src/types";
-import { createUmamiEvent } from "@/helpers/helpers";
 
 type MessageItemMenuProps = {
   message: MessagePopulated;
@@ -59,7 +59,7 @@ const MessageItemMenu: React.FC<MessageItemMenuProps> = ({ message, isSentBySign
         <MenuItem
           icon={<BsReply fontSize={18} />}
           bg="#2D2D2D"
-          _hover={{ bg: "WhiteAlpha.300" }}
+          _hover={{ bg: "whiteAlpha.300" }}
           isDisabled
         >
           Reply
@@ -67,7 +67,7 @@ const MessageItemMenu: React.FC<MessageItemMenuProps> = ({ message, isSentBySign
         <MenuItem
           icon={<FiEdit fontSize={18} />}
           bg="#2D2D2D"
-          _hover={{ bg: "WhiteAlpha.300" }}
+          _hover={{ bg: "whiteAlpha.300" }}
           isDisabled
         >
           Edit
@@ -75,15 +75,19 @@ const MessageItemMenu: React.FC<MessageItemMenuProps> = ({ message, isSentBySign
         <MenuItem
           icon={<MdOutlineContentCopy fontSize={18} />}
           bg="#2D2D2D"
-          _hover={{ bg: "WhiteAlpha.300" }}
-          isDisabled
+          _hover={{ bg: "whiteAlpha.300" }}
+          onClick={async () => {
+            await navigator.clipboard.writeText(message.body);
+            toast.success("Message text copied to clipboard.");
+            createUmamiEvent("Copy message to clipboard", message.sender.username || "");
+          }}
         >
           Copy Text
         </MenuItem>
         <MenuItem
           icon={<BsPin fontSize={18} />}
           bg="#2D2D2D"
-          _hover={{ bg: "WhiteAlpha.300" }}
+          _hover={{ bg: "whiteAlpha.300" }}
           isDisabled
         >
           Pin
@@ -91,7 +95,7 @@ const MessageItemMenu: React.FC<MessageItemMenuProps> = ({ message, isSentBySign
         <MenuItem
           icon={<TiArrowForwardOutline fontSize={18} />}
           bg="#2D2D2D"
-          _hover={{ bg: "WhiteAlpha.300" }}
+          _hover={{ bg: "whiteAlpha.300" }}
           isDisabled
         >
           Forward
